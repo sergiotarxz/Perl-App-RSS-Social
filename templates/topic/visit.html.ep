@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+% my $topic = stash('topic');
+% my @messages = @{stash('messages')};
+<html>
+	<head>
+	</head>
+	<body>
+		<a href="/">Root</a>
+		<h1>RSS::Social - Topic View</h1>
+
+		<h2><%= $topic->name %></h2>
+		<p><%= $topic->description%></p>
+		<ul>
+% for my $message (@messages) {
+			<li>
+% 	my ($user) = @{$message->authors};
+				<p><%= $user->user_name // $user->uuid %> wrote: <%= $message->text %></p>
+			</li>
+% } 
+		</ul>
+	</body>
+</html>
