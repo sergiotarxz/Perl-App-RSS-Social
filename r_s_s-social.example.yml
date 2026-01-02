@@ -1,2 +1,3 @@
 db:
   dbname: "rss_social"
+base_url: 'https://example.com'

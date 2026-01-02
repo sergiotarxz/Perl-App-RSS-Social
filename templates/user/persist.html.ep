@@ -1,0 +1,7 @@
+% layout 'root';
+% my $secret = stash 'secret';
+% my $uuid = stash 'uuid';
+<div class="titles">
+	<h1>RSS::Social - Generated RSS URL</h1>
+	<p><a href="/rss/<%=$uuid%>/<%=$secret%>">Copy this link into your RSS Reader</a>, do not share with anyone…</p>
+</div>

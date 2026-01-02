@@ -1,0 +1,22 @@
+% use DateTime;
+% use DateTime::Format::HTTP;
+% my $rss_url = stash 'rss_url';
+% my @items = @{stash 'items' // []};
+% my $date = DateTime->now->truncate( to => 'hour' );
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+	<channel>
+		<title><%= $rss_url->name %></title>
+		<link><%= base_url %></link>
+		<description><%= $rss_url->description %></description>
+% for my $item (@items) {
+		<item>
+			<title><%= $item->title %></title>
+			<link><%= $item->link %></link>
+			<guid><%= $item->guid %></guid>
+			<pubDate><%= $item->pub_date %></pubDate>
+			<description><%= $item->description %></description>
+		</item>
+% }
+	</channel>
+</rss>

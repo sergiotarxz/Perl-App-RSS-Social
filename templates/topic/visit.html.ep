@@ -1,22 +1,14 @@
-<!DOCTYPE html>
+% layout 'root';
 % my $topic = stash('topic');
 % my @messages = @{stash('messages')};
-<html>
-	<head>
-	</head>
-	<body>
-		<a href="/">Root</a>
-		<h1>RSS::Social - Topic View</h1>
-
-		<h2><%= $topic->name %></h2>
-		<p><%= $topic->description%></p>
-		<ul>
+<div class="titles">
+	<h1>RSS::Social - Topic View</h1>
+	<h2><%= $topic->name %></h2>
+	<p><%= $topic->description%></p>
+	<h2>Messages</h2>
+</div>
+<div class="list-topic-messages">
 % for my $message (@messages) {
-			<li>
-% 	my ($user) = @{$message->authors};
-				<p><%= $user->user_name // $user->uuid %> wrote: <%= $message->text %></p>
-			</li>
-% } 
-		</ul>
-	</body>
-</html>
+%=	include 'components/message', message => $message;
+% }
+</div>

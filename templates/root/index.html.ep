@@ -1,19 +1,15 @@
-<!DOCTYPE html>
+% layout 'root';
 % my @topics = @{stash('topics') // []};
-<html>
-	<head>
-	</head>
-	<body>
-		<h1>RSS::Social - Main page</h1>
-		<h2>Topics</h2>
-		<ul>
+<div class="titles">
+	<h1>RSS::Social - Main page</h1>
+	<h2>Topics</h2>
+</div>
+<div class="list-topics">
 % for my $topic (@topics) {
-			<li>
-				<p><%= $topic->name %></p>
+	<article>
+				<h3><%= $topic->name %></h3>
 				<p><a href="/rs/<%=$topic->slug%>">Visit the topic</a></p>
 				<p><%= $topic->description%></p>
-			</li>
+	</article>
 % }
-		</ul>
-	</body>
-</html>
+</div>

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use DBIx::Quick;
-RSS::Social::DB
+use RSS::Social::DB;
 use UUID qw/uuid4/;
 
 sub dbh {
@@ -27,4 +27,15 @@ field name            => ( is => 'rw', required => 1, search => 1 );
 field description     => ( is => 'rw' );
 
 fix;
+
+sub recover_auth {
+	my $self = shift;
+	my ($uuid, $secret) = @_;
+	my ($rss_url) = @{$self->search(uuid => $uuid)};
+	return if !defined $rss_url;
+	if (!RSS::Social::UserSecret->new->check($secret, $rss_url->bcrypted_secret)) {
+		return;
+	}
+	return $rss_url;
+}
 1;

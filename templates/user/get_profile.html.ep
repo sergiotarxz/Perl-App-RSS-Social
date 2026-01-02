@@ -1,0 +1,24 @@
+% layout 'root';
+% use RSS::Social::Form;
+% my $user = user();
+<div class="titles">
+	<h1>RSS::Social - User Profile</h1>
+	<h2>Edit username</h2>		
+% my $form = RSS::Social::Form->new(action => '/private/user/username', method => 'post');
+%== $form->start;
+%== 	$form->input(name => 'username', description => 'Username', type => 'text', default_value => $user->user_name // '');
+%== 	$form->input(name => 'submit', type => 'submit', default_value => 'Submit');
+%== $form->end;
+	<h2>Edit name</h2>		
+% $form = RSS::Social::Form->new(action => '/private/user/name', method => 'post');
+%== $form->start;
+%== 	$form->input(name => 'name', description => 'Name', type => 'text', default_value => $user->name // '');
+%== 	$form->input(name => 'submit', type => 'submit', default_value => 'Submit');
+%== $form->end;
+	<h2>Edit bio</h2>		
+% $form = RSS::Social::Form->new(action => '/private/user/bio', method => 'post');
+%== $form->start;
+%== 	$form->textarea(name => 'bio', description => 'Bio', type => 'text', default_value => $user->bio // '');
+%== 	$form->input(name => 'submit', type => 'submit', default_value => 'Submit');
+%== $form->end;
+</div>

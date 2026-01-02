@@ -7,6 +7,9 @@ use warnings;
 use DBIx::Quick;
 use RSS::Social::DB;
 use RSS::Social::Admin;
+use RSS::Social::RSSItem;
+use RSS::Social::DB::Converter::DateTime;
+use DateTime::Format::Duration;
 use UUID qw/uuid4/;
 
 require RSS::Social::UserPermission;
@@ -25,10 +28,25 @@ field name      => ( is => 'rw' );
 field surname   => ( is => 'rw' );
 field country   => ( is => 'rw' );
 field city      => ( is => 'rw' );
+field bio      => ( is => 'rw' );
 field id_admin => (
     is     => 'rw',
     search => 1,
     fk     => [qw/RSS::Social::Admin id admins users/]
+);
+field creation_time => (
+    is        => 'ro',
+    search    => 1,
+    converter => RSS::Social::DB::Converter::DateTime->new,
+);
+field last_connection => (
+    is        => 'rw',
+    search    => 1,
+    converter => RSS::Social::DB::Converter::DateTime->new,
+);
+field is_enabled => (
+    is     => 'rw',
+    search => 1,
 );
 
 fix;
@@ -125,4 +143,50 @@ sub make_admin {
     RSS::Social::User->update( $instance, 'id_admin' );
     return $instance->fetch_again;
 }
+
+instance_sub rss_items => sub {
+    my $self = shift;
+    require RSS::Social::UserLoginUrl;
+    require RSS::Social;
+    my $minimum_account_time = DateTime->now->add( minutes => -5 );
+    if ( $self->creation_time > $minimum_account_time ) {
+	    say 'hola';
+        my $duration        = $self->creation_time - $minimum_account_time;
+        my $duration_format = DateTime::Format::Duration->new(
+            pattern => '%M:%S Remaining for your account to be activated' );
+        return (
+            RSS::Social::RSSItem->new(
+                title       => $duration_format->format_duration( $duration, ),
+                link        => RSS::Social->new->config->{base_url},
+                description => '',
+                guid        => '/activation/'
+                  . $duration_format->format_duration($duration) . '/'
+                  . $self->uuid,
+            )
+        );
+    }
+    my ($login_url) = @{ RSS::Social::UserLoginUrl->search(
+            created => { '>', \'now() - interval \'10 minutes\'' },
+            id_user => $self->id,
+            used    => 0,
+        )
+    };
+    my @items;
+    if ( !$login_url ) {
+        my $secret;
+        ( $login_url, $secret ) =
+          RSS::Social::UserLoginUrl->generate_for_user($self);
+        push @items,
+          RSS::Social::RSSItem->new(
+            title       => 'Login with this link',
+            description =>
+'Do not share this url with anyone or they will have access to your account',
+            link => RSS::Social->new->config->{base_url}
+              . '/fast-login/'
+              . $login_url->uuid . '/'
+              . $secret,
+          );
+    }
+    return @items;
+};
 1;
