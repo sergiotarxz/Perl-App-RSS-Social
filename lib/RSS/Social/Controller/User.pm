@@ -15,6 +15,24 @@ use RSS::Social::UserLoginUrl;
 use RSS::Social::UserSession;
 use UUID qw/uuid4/;
 
+sub delete_message {
+    my $c            = shift;
+    my $message_uuid = $c->param('uuid');
+    my ($message) = @{ RSS::Social::Messages->search( uuid => $message_uuid ) };
+    if ( !defined $message ) {
+        say 'hola';
+        return $c->redirect_to('/');
+    }
+    my ($message_user) = @{ $message->authors };
+    if ( !defined $message_user || $c->user->uuid ne $message_user->uuid ) {
+        say 'hola';
+        return $c->redirect_to('/');
+    }
+    my ($topic) = @{ $message->topics };
+    RSS::Social::Messages->delete($message);
+    return $c->redirect_to( '/rs/' . $topic->slug );
+}
+
 sub public_profile {
     my $self            = shift;
     my $user_identifier = $self->param('user_identifier');
@@ -30,7 +48,7 @@ sub public_profile {
         )
     };
     if ( defined $user ) {
-    	return $self->render( user => $user );
+        return $self->render( user => $user );
     }
     return $self->reply->not_found;
 

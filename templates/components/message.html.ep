@@ -2,4 +2,9 @@
 <article>
 % 	my ($user) = @{$message->authors};
 	<p><a href="/profile/<%=$user->user_name // $user->uuid%>"><%= $user->user_name // $user->uuid %></a> wrote: <%= $message->text %></p>
+	<nav><%
+if ($user->uuid eq user->uuid) {
+		%><form action="/private/message/<%=$message->uuid%>/delete" method="post"><button type="submit">Delete</button></form><%
+}
+	%></nav>
 </article>

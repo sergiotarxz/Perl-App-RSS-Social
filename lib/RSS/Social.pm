@@ -7,6 +7,7 @@ use warnings;
 use Mojo::Base 'Mojolicious';
 
 sub startup {
+    require RSS::Social::Messages;
     my ($self)      = @_;
     my $main_routes = $self->routes;
     my $r           = $main_routes->under(
@@ -39,6 +40,7 @@ sub startup {
     $ar->post('/user/username')->to('User#update_username');
     $ar->post('/user/name')->to('User#update_name');
     $ar->post('/user/bio')->to('User#update_bio');
+    $ar->post('/message/:uuid/delete')->to('delete_message');
 }
 
 sub new {
