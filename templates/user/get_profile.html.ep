@@ -6,6 +6,9 @@
 	<h2>Edit username</h2>		
 % my $form = RSS::Social::Form->new(action => '/private/user/username', method => 'post');
 %== $form->start;
+% if ($error) {
+	<p style="color: red;"><%=$error%></p>
+% }
 <%== 	$form->input(
 		name => 'username',
 		description => 'Username',

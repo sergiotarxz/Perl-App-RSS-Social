@@ -32,6 +32,7 @@ sub input {
     my $class         = $params{class};
     my $pattern         = $params{pattern};
     my $title         = $params{title};
+    my $required         = $params{required};
     my $id            = "input-form-$name-@{[$id_counter++]}";
     return
         ("<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>" x !!$description) . "<input name=\"@{[xml_escape $name]}\" "
@@ -41,6 +42,7 @@ sub input {
       . ( "title=\"@{[xml_escape $title]}\" " x !!$title )
       . ( "id=\"@{[xml_escape $id]}\" " x !!$id )
       . ( "value=\"@{[xml_escape $default_value]}\"" x !!$default_value )
+      . ( "required " x !!$required )
       . '/>' . '<br/>';
 }
 

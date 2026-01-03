@@ -15,6 +15,27 @@ use RSS::Social::UserLoginUrl;
 use RSS::Social::UserSession;
 use UUID qw/uuid4/;
 
+sub public_profile {
+    my $self            = shift;
+    my $user_identifier = $self->param('user_identifier');
+    my ($user)          = @{ RSS::Social::User->search(
+            uuid => $user_identifier,
+        )
+    };
+    if ( defined $user ) {
+        return $self->render( user => $user );
+    }
+    ($user) = @{ RSS::Social::User->search(
+            user_name => $user_identifier,
+        )
+    };
+    if ( defined $user ) {
+    	return $self->render( user => $user );
+    }
+    return $self->reply->not_found;
+
+}
+
 sub persist {
     my ($self)  = @_;
     my $slug    = $self->param('slug');
@@ -41,7 +62,9 @@ sub persist {
 }
 
 sub get_profile {
-    return shift->render;
+    my $c     = shift;
+    my $error = $c->param('error');
+    return $c->render( error => $error );
 }
 
 sub fast_login {
@@ -79,7 +102,10 @@ sub update_username {
         return $c->redirect_to($return);
     }
     $user->user_name($username);
-    RSS::Social::User->update( $user, 'user_name' );
+    eval { RSS::Social::User->update( $user, 'user_name' ); };
+    if ($@) {
+        return $c->redirect_to("$return?error=The%20username%20is%20taken");
+    }
     return $c->redirect_to($return);
 }
 

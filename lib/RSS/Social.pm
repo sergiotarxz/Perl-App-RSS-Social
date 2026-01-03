@@ -20,6 +20,7 @@ sub startup {
     $r->get('/persist-user')->to('User#persist');
     $r->get('/rss/:uuid/:secret')->to('RSS#private_feed');
     $r->get('/fast-login/:uuid/:secret')->to('User#fast_login');
+    $r->get('/profile/:user_identifier')->to('User#public_profile');
     my $ar = $r->under(
         '/private',
         sub {

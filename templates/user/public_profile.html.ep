@@ -1,0 +1,12 @@
+% layout 'root';
+<div class="titles">
+	<h1>User <%= $user->user_name // $user->uuid %></h1>
+% if (defined $user->bio) {
+	<p><%=$user->bio%></p>
+% }
+	<ul>
+% if (defined $user->name) {
+		<li>Real name: <%=$user->name%></li>
+% }
+	</ul>
+</div>
