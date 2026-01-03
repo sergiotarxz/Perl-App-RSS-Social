@@ -1,0 +1,14 @@
+% layout 'root';
+% my $secret = stash 'secret';
+% my $uuid = stash 'uuid';
+% use RSS::Social::Form;
+<div class="titles">
+	<h1>RSS::Social - Create new topic</h1>
+% my $form = RSS::Social::Form->new(action => '/private/topic/create', method => 'post');
+%== $form->start;
+%== $form->input(name => 'topic_name', type => 'text', description => 'Topic name');
+%== $form->input(name => 'topic_slug', type => 'text', description => 'Topic slug');
+%== $form->textarea(name => 'topic_description', description => 'Description');
+%== $form->input(name => 'submit', type => 'submit', default_value => 'Submit');
+%== $form->end;
+</div>
