@@ -150,7 +150,6 @@ instance_sub rss_items => sub {
     require RSS::Social;
     my $minimum_account_time = DateTime->now->add( minutes => -5 );
     if ( $self->creation_time > $minimum_account_time ) {
-	    say 'hola';
         my $duration        = $self->creation_time - $minimum_account_time;
         my $duration_format = DateTime::Format::Duration->new(
             pattern => '%M:%S Remaining for your account to be activated' );

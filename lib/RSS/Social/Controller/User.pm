@@ -40,6 +40,10 @@ sub persist {
     $self->render( secret => $secret, uuid => $rss_url_uuid );
 }
 
+sub get_profile {
+    return shift->render;
+}
+
 sub fast_login {
     my $self   = shift;
     my $uuid   = $self->param('uuid');
@@ -50,7 +54,7 @@ sub fast_login {
         return $self->reply->not_found;
     }
     $user_login_url->used(1);
-    RSS::Social::UserLoginUrl->update($user_login_url, 'used');
+    RSS::Social::UserLoginUrl->update( $user_login_url, 'used' );
     $user_login_url = $user_login_url->fetch_again;
     my ($user) = @{ $user_login_url->users };
     return $self->reply->not_found if !$user;
@@ -63,5 +67,51 @@ sub fast_login {
     $self->redirect_to( $self->config->{base_url} );
 }
 
-RSS::Social::Controller::Log->import(qw/persist/);
+sub update_username {
+    my $c        = shift;
+    my $username = $c->param('username');
+    my $user     = $c->user;
+    my $return   = '/private/user/profile';
+    if ( !$user ) {
+        return $c->redirect_to($return);
+    }
+    if ( $username !~ /^[a-zA-Z0-9 _.]{5,}$/ ) {
+        return $c->redirect_to($return);
+    }
+    $user->user_name($username);
+    RSS::Social::User->update( $user, 'user_name' );
+    return $c->redirect_to($return);
+}
+
+sub update_name {
+    my $c      = shift;
+    my $name   = $c->param('name');
+    my $user   = $c->user;
+    my $return = '/private/user/profile';
+    if ( !$user ) {
+        return $c->redirect_to($return);
+    }
+    if ( $name !~ /^[a-zA-Z0-9 _.]{3,}$/ ) {
+        return $c->redirect_to($return);
+    }
+    $user->name($name);
+    RSS::Social::User->update( $user, 'name' );
+    return $c->redirect_to($return);
+}
+
+sub update_bio {
+    my $c      = shift;
+    my $bio    = $c->param('bio');
+    my $user   = $c->user;
+    my $return = '/private/user/profile';
+    if ( !$user ) {
+        return $c->redirect_to($return);
+    }
+    $user->bio($bio);
+    RSS::Social::User->update( $user, 'bio' );
+    return $c->redirect_to($return);
+}
+
+RSS::Social::Controller::Log->import(
+    qw/persist fast_login update_username update_name update_bio/);
 1;
