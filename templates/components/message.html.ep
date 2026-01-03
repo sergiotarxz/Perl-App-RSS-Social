@@ -1,5 +1,5 @@
 % my $message = stash 'message' or die 'No message sent';
 <article>
 % 	my ($user) = @{$message->authors};
-	<p><%= $user->user_name // $user->uuid %> wrote: <%= $message->text %></p>
+	<p><a href="/profile/<%=$user->user_name // $user->uuid%>"><%= $user->user_name // $user->uuid %></a> wrote: <%= $message->text %></p>
 </article>

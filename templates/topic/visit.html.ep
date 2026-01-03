@@ -1,11 +1,20 @@
 % layout 'root';
+% use RSS::Social::Form;
 % my $topic = stash('topic');
 % my @messages = @{stash('messages')};
 <div class="titles">
 	<h1>RSS::Social - Topic View</h1>
 	<h2><%= $topic->name %></h2>
 	<p><%= $topic->description%></p>
-	<h2>Messages</h2>
+</div>
+<div class="new-message-topic">
+	<h2>New message</h2>
+% my $form = RSS::Social::Form->new(action => '/private/topic/new-message', method => 'post');
+%== $form->start;
+%== $form->textarea(name => 'message', placeholder => 'Write your thoughts');
+%== $form->input(name => 'topic', default_value => $topic->uuid, type => 'hidden');
+%== $form->input(name => 'submit', default_value => 'Send', type => 'submit');
+%== $form->end;
 </div>
 <div class="list-topic-messages">
 % for my $message (@messages) {

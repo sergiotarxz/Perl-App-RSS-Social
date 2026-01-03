@@ -7,7 +7,7 @@
 % my $form = RSS::Social::Form->new(action => '/private/topic/create', method => 'post');
 %== $form->start;
 %== $form->input(name => 'topic_name', type => 'text', description => 'Topic name');
-%== $form->input(name => 'topic_slug', type => 'text', description => 'Topic slug');
+%== $form->input(name => 'topic_slug', type => 'text', description => 'Topic slug', pattern => '^(?:[a-zA-Z0-9_]|-){5,}$', title => 'Topic slug must have 5 characters minimum and be a-z A-Z 0-9 dashes (-) or underscores (_)');
 %== $form->textarea(name => 'topic_description', description => 'Description');
 %== $form->input(name => 'submit', type => 'submit', default_value => 'Submit');
 %== $form->end;

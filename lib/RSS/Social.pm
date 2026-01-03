@@ -33,6 +33,7 @@ sub startup {
     );
     $ar->get('/topic/create')->to('Topic#get_create_topic');
     $ar->post('/topic/create')->to('Topic#post_create_topic');
+    $ar->post('/topic/new-message')->to('Topic#post_new_message');
     $ar->get('/user/profile')->to('User#get_profile');
     $ar->post('/user/username')->to('User#update_username');
     $ar->post('/user/name')->to('User#update_name');

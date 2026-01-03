@@ -53,13 +53,32 @@ sub post_create_topic {
     }
     my $uuid  = uuid4();
     my $topic = RSS::Social::Topic::Instance->new(
-        uuid        => $uuid,
-        name        => $topic_name,
-        slug        => $topic_slug,
-        description => $topic_description,
+        uuid               => $uuid,
+        name               => $topic_name,
+        slug               => $topic_slug,
+        description        => $topic_description,
+        id_user_created_by => $self->user->id,
     );
     RSS::Social::Topic->insert($topic);
     return $self->redirect_to("/rs/@{[$topic->slug]}");
+}
+
+sub post_new_message {
+    my $self       = shift;
+    my $message    = $self->param('message');
+    my $topic_uuid = $self->param('topic');
+    my ($topic) =
+      @{ RSS::Social::Topic->search( uuid => $topic_uuid ) };
+    my $uuid = uuid4();
+    RSS::Social::Messages->insert(
+        RSS::Social::Messages::Instance->new(
+            uuid            => $uuid,
+            id_topic        => $topic->id,
+            id_user_creator => $self->user->id,
+            text            => $message
+        )
+    );
+    return $self->redirect_to( '/rs/' . $topic->slug );
 }
 
 RSS::Social::Controller::Log->import(qw/visit get_create_topic/);

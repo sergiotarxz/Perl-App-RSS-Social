@@ -6,7 +6,15 @@
 	<h2>Edit username</h2>		
 % my $form = RSS::Social::Form->new(action => '/private/user/username', method => 'post');
 %== $form->start;
-%== 	$form->input(name => 'username', description => 'Username', type => 'text', default_value => $user->user_name // '');
+<%== 	$form->input(
+		name => 'username',
+		description => 'Username',
+		type => 'text',
+		default_value => $user->user_name // '',
+		pattern => '^[a-zA-Z0-9 _.]{5,}$',
+		title => 'Username must be at least 5 characters long and composed only of letters, numbers, spaces and underscores'
+	);
+%>
 %== 	$form->input(name => 'submit', type => 'submit', default_value => 'Submit');
 %== $form->end;
 	<h2>Edit name</h2>		
