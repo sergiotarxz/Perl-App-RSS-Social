@@ -22,6 +22,7 @@ sub startup {
     $r->get('/rss/:uuid/:secret')->to('RSS#private_feed');
     $r->get('/fast-login/:uuid/:secret')->to('User#fast_login');
     $r->get('/profile/:user_identifier')->to('User#public_profile');
+    $r->get('/rs/:topic_slug/message/:message_uuid')->to('Topic#view_message');
     my $ar = $r->under(
         '/private',
         sub {

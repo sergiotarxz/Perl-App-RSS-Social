@@ -1,17 +1,28 @@
 % layout 'root';
 % use RSS::Social::Form;
+% use RSS::Social::RSSUrl;
 % my $topic = stash('topic');
 % my @messages = @{stash('messages')};
+% my @urls;
+% if (defined user) {
+%     OUTER: for my $rss_url (@{user->rss_urls}) {
+%     	my @rss_url_subscriptions = @{$rss_url->subscriptions};
+%     	for my $subscription (@rss_url_subscriptions) {
+%     		next OUTER if $subscription->id_topic == $topic->id;
+%     	}
+%     	push @urls, $rss_url;
+%     }
+% }
 <div class="titles">
 	<h1>RSS::Social - Topic View</h1>
-	<h2><%= $topic->name %></h2>
+	<h2><a href="/rs/<%=$topic->slug%>"><%= $topic->name %></a></h2>
 	<p><%= $topic->description%></p>
 	<nav><%
-if (defined user()) {
+if (defined user() && scalar @urls) {
 		%><form action="/private/subscribe" method="post">
 			<input type="hidden" name="topic" value="<%=$topic->uuid%>"/>
 			<button type="submit">Subcribe in</button><select name="rss_url">
-% 	for my $rss_url (@{user->rss_urls}) {
+%       for my $rss_url (@urls) {
 			<option value="<%=$rss_url->uuid%>"><%= $rss_url->name %></option>
 % 	}
 		</select>

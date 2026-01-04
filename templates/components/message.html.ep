@@ -1,4 +1,5 @@
 % my $message = stash 'message' or die 'No message sent';
+% my ($topic) = @{$message->topics};
 <article class="message">
 % 	my ($user) = @{$message->authors};
 	<p><a href="/profile/<%=$user->user_name // $user->uuid%>"><%= $user->user_name // $user->uuid %></a> wrote: <%= $message->text %></p>
@@ -6,5 +7,5 @@
 if (!defined user || $user->uuid eq user->uuid) {
 		%><form action="/private/message/<%=$message->uuid%>/delete" method="post"><button type="submit">Delete</button></form><%
 }
-	%></nav>
+	%><a href="/rs/<%=$topic->slug%>/message/<%=$message->uuid%>">Permalink</a></nav>
 </article>

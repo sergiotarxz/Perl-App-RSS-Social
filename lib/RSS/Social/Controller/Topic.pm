@@ -11,6 +11,27 @@ use RSS::Social::User;
 use RSS::Social::Controller::Log;
 use UUID qw/uuid4/;
 
+sub view_message {
+    my $self         = shift;
+    my $slug         = $self->param('topic_slug');
+    my $message_uuid = $self->param('message_uuid');
+    my ($topic) = @{ RSS::Social::Topic->search(
+            slug => $slug,
+        )
+    };
+    if (!defined $topic) {
+	    return $self->redirect_to('/');
+    }
+    my ($message) = @{ RSS::Social::Messages->search(
+            uuid => $message_uuid,
+        )
+    };
+    if (!defined $message) {
+	    return $self->redirect_to('/rs/'.$topic->slug);
+    }
+    $self->render(message => $message, topic => $topic);
+}
+
 sub visit {
     my ($self)  = @_;
     my $slug    = $self->param('slug');
