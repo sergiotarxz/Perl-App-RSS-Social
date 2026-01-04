@@ -7,6 +7,7 @@ use warnings;
 use DBIx::Quick;
 use RSS::Social::DB;
 use UUID qw/uuid4/;
+use RSS::Social::DB::Converter::DateTime;
 
 sub dbh {
     return RSS::Social::DB->connect;
@@ -20,6 +21,7 @@ field slug => ( is => 'rw', search => 1, required => 1);
 field name  => ( is => 'rw', search => 1, required => 1);
 field description      => ( is => 'rw' );
 field id_user_created_by   => ( is => 'rw', fk     => [qw/RSS::Social::User id creators created_topics/], search => 1 );
+field created => ( is => 'ro', search => 1, converter => RSS::Social::DB::Converter::DateTime->new);
 
 fix;
 1;

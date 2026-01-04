@@ -191,6 +191,8 @@ sub migrations {
         create_index(qw/users_sessions uuid/),
         create_index(qw/users_sessions id_user/),
         'ALTER TABLE users ADD COLUMN bio TEXT NULL',
+        'ALTER TABLE topics ADD COLUMN created timestamp DEFAULT now();',
+	create_index(qw/topics created/),
     );
 }
 

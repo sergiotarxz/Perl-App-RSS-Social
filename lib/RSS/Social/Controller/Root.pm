@@ -12,6 +12,7 @@ sub index {
 	my ($self)     = @_;
 	my @topics = @{RSS::Social::Topic->free_search(
 		-limit => 10,
+		-order_by => 'created DESC',
 	)};
 	$self->render(topics => \@topics);
 }

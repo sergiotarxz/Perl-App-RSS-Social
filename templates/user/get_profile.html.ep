@@ -23,7 +23,7 @@
 	<h2>Edit name</h2>		
 % $form = RSS::Social::Form->new(action => '/private/user/name', method => 'post');
 %== $form->start;
-%== 	$form->input(name => 'name', description => 'Name', type => 'text', default_value => $user->name // '');
+%== 	$form->input(name => 'name', description => 'Name', type => 'text', default_value => $user->name // '', pattern => '^[a-zA-Z0-9 _.]{3,}$', title => 'At least 3 characters alphanumeric');
 %== 	$form->input(name => 'submit', type => 'submit', default_value => 'Submit');
 %== $form->end;
 	<h2>Edit bio</h2>		
