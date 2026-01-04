@@ -18,7 +18,7 @@ sub private_feed {
 	if (!$user) {
 		return $self->reply->not_found;
 	}
-	my @items = ($user->rss_items);
+	my @items = ($user->rss_items, $rss_url->rss_items);
 	$self->res->headers->content_type('application/xml');
 	$self->render(format => 'xml', rss_url => $rss_url, items => \@items);
 }

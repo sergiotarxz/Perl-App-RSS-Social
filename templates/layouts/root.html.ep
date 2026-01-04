@@ -5,23 +5,28 @@
 		<link rel="stylesheet" href="/css/style.css"/>
 	</head>
 	<body>
-		<nav class="main-menu">
-			<div>
-				<a href="/"/>
-					<div class="circle"></div>
-				</a><%
+		<header>
+			<div class="head-banner">
+				<p>RSS::Social We Can't Spam You.</p>
+			</div>
+			<nav class="main-menu">
+				<div>
+					<a class="circle" href="/"/>
+						<div class="circle"></div>
+					</a><%
 if (!user()) {
-				%><a class="link" href="/persist-user"/>Create a persistent user</a><%
+					%><a class="link" href="/persist-user"/>Create a persistent user</a><%
 }
 if (user()) {
-				%><a class="link" href="/private/user/profile"/>Profile</a><%
-				%><a class="link" href="/private/topic/create"/>Create new topic</a><%
+					%><a class="link" href="/private/user/profile"/>Profile</a><%
+					%><a class="link" href="/private/topic/create"/>Create new topic</a><%
 }
-				%><a class="link" href="http://example.com"/>example</a><%
-				%><a class="link" href="http://example.com"/>example</a><%
-				%><a class="link" href="http://example.com"/>example</a>
-			</div>
-		</nav>
+					%><a class="link" href="http://example.com"/>example</a><%
+					%><a class="link" href="http://example.com"/>example</a><%
+					%><a class="link" href="http://example.com"/>example</a>
+				</div>
+			</nav>
+		</header>
 		<div class="content">
 %= content
 		</div>

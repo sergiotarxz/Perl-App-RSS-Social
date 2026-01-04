@@ -30,20 +30,21 @@ sub input {
     my $description   = $params{description};
     my $default_value = $params{default_value};
     my $class         = $params{class};
-    my $pattern         = $params{pattern};
+    my $pattern       = $params{pattern};
     my $title         = $params{title};
-    my $required         = $params{required};
+    my $required      = $params{required};
     my $id            = "input-form-$name-@{[$id_counter++]}";
-    return
-        ("<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>" x !!$description) . "<input name=\"@{[xml_escape $name]}\" "
+    return (
+"<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>"
+          x !!$description )
+      . "<input name=\"@{[xml_escape $name]}\" "
       . ( "type=\"@{[xml_escape $type]}\" " x !!$type )
       . ( "class=\"@{[xml_escape $class]}\" " x !!$class )
       . ( "pattern=\"@{[xml_escape $pattern]}\" " x !!$pattern )
       . ( "title=\"@{[xml_escape $title]}\" " x !!$title )
       . ( "id=\"@{[xml_escape $id]}\" " x !!$id )
       . ( "value=\"@{[xml_escape $default_value]}\"" x !!$default_value )
-      . ( "required " x !!$required )
-      . '/>' . '<br/>';
+      . ( "required " x !!$required ) . '/>' . '<br/>';
 }
 
 sub textarea {
@@ -53,11 +54,13 @@ sub textarea {
     my $type          = $params{type};
     my $description   = $params{description};
     my $default_value = $params{default_value};
-    my $placeholder = $params{placeholder};
+    my $placeholder   = $params{placeholder};
     my $class         = $params{class};
     my $id            = "textarea-form-$name-@{[$id_counter++]}";
-    return
-        ("<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>" x !!$description) . "<textarea rows=\"10\" cols=\"60\" name=\"@{[xml_escape $name]}\" "
+    return (
+"<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>"
+          x !!$description )
+      . "<textarea rows=\"10\" cols=\"60\" name=\"@{[xml_escape $name]}\" "
       . ( "type=\"@{[xml_escape $type]}\" " x !!$type )
       . ( "class=\"@{[xml_escape $class]}\" " x !!$class )
       . ( "placeholder=\"@{[xml_escape $placeholder]}\" " x !!$placeholder )
