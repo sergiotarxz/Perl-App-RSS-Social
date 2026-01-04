@@ -40,7 +40,8 @@ sub startup {
     $ar->post('/user/username')->to('User#update_username');
     $ar->post('/user/name')->to('User#update_name');
     $ar->post('/user/bio')->to('User#update_bio');
-    $ar->post('/message/:uuid/delete')->to('delete_message');
+    $ar->post('/message/:uuid/delete')->to('User#delete_message');
+    $ar->post('/subscribe')->to('User#subscribe');
 }
 
 sub new {

@@ -28,7 +28,7 @@ field name      => ( is => 'rw' );
 field surname   => ( is => 'rw' );
 field country   => ( is => 'rw' );
 field city      => ( is => 'rw' );
-field bio      => ( is => 'rw' );
+field bio       => ( is => 'rw' );
 field id_admin => (
     is     => 'rw',
     search => 1,
@@ -185,6 +185,61 @@ instance_sub rss_items => sub {
               . $login_url->uuid . '/'
               . $secret,
           );
+    }
+    for my $message (
+        @{ RSS::Social::Messages->free_search(
+                -join => [
+                    qw/topics.id=messages.id_topic topics
+                      rss_url_subscriptions.id_topic=topics.id rss_url_subscriptions
+                      rss_urls.id=rss_url_subscriptions.id_rss_url rss_urls
+                      rss_urls.id_user=users.id users/
+                ],
+                -where => {
+                    'users.id'         => $self->id,
+                    'messages.created' => {
+                        '>',
+                        \[
+'COALESCE(rss_url_subscriptions.last_fetch, now() - ?::interval)',
+                            '3 days'
+                        ]
+                    }
+                },
+                -limit => 20,
+            )
+        }
+      )
+    {
+        my ($topic) = @{ $message->topics };
+        push @items,
+          RSS::Social::RSSItem->new(
+            title => 'Message in topic '
+              . $topic->name . ': '
+              . substr($message->text,
+            0, 20),
+            description => $message->text,
+            link        => RSS::Social->new->config->{base_url} . '/rs/'
+              . $topic->slug
+              . '/message/'
+              . $message->uuid,
+          );
+    }
+    for my $rss_url_subscription (
+        @{ RSS::Social::RSSUrlSubscription->free_search(
+                -join => [
+                    qw/
+                      rss_urls.id=rss_url_subscriptions.id_rss_url rss_urls
+                      rss_urls.id_user=users.id users/
+                ],
+                -where => {
+                    'users.id' => $self->id,
+                }
+            )
+        }
+      )
+    {
+        $rss_url_subscription->last_fetch( DateTime->now );
+        RSS::Social::RSSUrlSubscription->update( $rss_url_subscription,
+            qw/last_fetch/ );
     }
     return @items;
 };

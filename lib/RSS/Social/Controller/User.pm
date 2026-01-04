@@ -13,7 +13,31 @@ use RSS::Social::UserSecret;
 use RSS::Social::RSSUrl;
 use RSS::Social::UserLoginUrl;
 use RSS::Social::UserSession;
+use RSS::Social::RSSUrlSubscription;
 use UUID qw/uuid4/;
+
+sub subscribe {
+	my $c = shift;
+	my $topic_uuid = $c->param('topic');
+	my $rss_url_uuid = $c->param('rss_url');
+	my ($topic) = @{RSS::Social::Topic->search(uuid => $topic_uuid)};
+	if (!$topic) {
+		return $c->redirect_to('/');
+	}
+	my ($rss_url) = @{RSS::Social::RSSUrl->search(uuid => $rss_url_uuid)};
+	if (!$rss_url) {
+		return $c->redirect_to('/');
+	}
+	my $uuid  = uuid4();
+        my $rss_url_subscription =
+          RSS::Social::RSSUrlSubscription::Instance->new(
+            uuid       => $uuid,
+            id_topic   => $topic->id,
+            id_rss_url => $rss_url->id,
+          );
+	RSS::Social::RSSUrlSubscription->insert($rss_url_subscription);
+	return $c->redirect_to('/rs/'.$topic->slug);
+}
 
 sub delete_message {
     my $c            = shift;

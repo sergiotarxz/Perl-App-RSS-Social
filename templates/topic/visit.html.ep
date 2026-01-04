@@ -6,6 +6,18 @@
 	<h1>RSS::Social - Topic View</h1>
 	<h2><%= $topic->name %></h2>
 	<p><%= $topic->description%></p>
+	<nav><%
+if (defined user()) {
+		%><form action="/private/subscribe" method="post">
+			<input type="hidden" name="topic" value="<%=$topic->uuid%>"/>
+			<button type="submit">Subcribe in</button><select name="rss_url">
+% 	for my $rss_url (@{user->rss_urls}) {
+			<option value="<%=$rss_url->uuid%>"><%= $rss_url->name %></option>
+% 	}
+		</select>
+		</form><%
+}
+	%></nav>
 </div>
 <div class="new-message-topic">
 % if (defined user) {

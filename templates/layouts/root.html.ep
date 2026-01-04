@@ -11,6 +11,14 @@ body {
 	background: #F3F2ED;
 }
 
+article.message p {
+	white-space: pre-wrap;
+}
+
+div.titles p {
+	white-space: pre-wrap;
+}
+
 nav.main-menu {
 	width: 100%;
 	background: #D34E4E;
