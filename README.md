@@ -8,6 +8,15 @@ This wants to be a social network focused in the RSS open protocol for user auth
 
 It will be developed in my spare time.
 
+## Prepare the project
+
+Run:
+
+```shell
+perl Build.PL
+perl Build installdeps
+```
+
 ## Configuration
 
 Setup a postgresql database accesible with the current user.
