@@ -192,7 +192,8 @@ sub migrations {
         create_index(qw/users_sessions id_user/),
         'ALTER TABLE users ADD COLUMN bio TEXT NULL',
         'ALTER TABLE topics ADD COLUMN created timestamp DEFAULT now();',
-	create_index(qw/topics created/),
+        create_index(qw/topics created/),
+        # TODO: Drop users_login_urls and users_sessions and associate with rss_urls instead of users for more fine grained control
     );
 }
 
