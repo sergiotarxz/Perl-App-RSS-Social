@@ -1,0 +1,12 @@
+% layout 'root';
+% use RSS::Social::Form;
+% my $topic = stash('topic');
+% my $message = stash('message');
+<div class="titles">
+	<h1>RSS::Social - Viewing Message</h1>
+	<h2><a href="/rs/<%=$topic->slug%>"><%= $topic->name %></a></h2>
+	<p><%= $topic->description%></p>
+</div>
+<div class="list-topic-messages">
+%= include 'components/message', message => $message;
+</div>

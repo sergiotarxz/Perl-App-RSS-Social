@@ -16,27 +16,61 @@ use RSS::Social::UserSession;
 use RSS::Social::RSSUrlSubscription;
 use UUID qw/uuid4/;
 
-sub subscribe {
+sub unsubscribe {
 	my $c = shift;
-	my $topic_uuid = $c->param('topic');
-	my $rss_url_uuid = $c->param('rss_url');
-	my ($topic) = @{RSS::Social::Topic->search(uuid => $topic_uuid)};
-	if (!$topic) {
-		return $c->redirect_to('/');
-	}
-	my ($rss_url) = @{RSS::Social::RSSUrl->search(uuid => $rss_url_uuid)};
-	if (!$rss_url) {
-		return $c->redirect_to('/');
-	}
-	my $uuid  = uuid4();
-        my $rss_url_subscription =
-          RSS::Social::RSSUrlSubscription::Instance->new(
-            uuid       => $uuid,
-            id_topic   => $topic->id,
-            id_rss_url => $rss_url->id,
-          );
-	RSS::Social::RSSUrlSubscription->insert($rss_url_subscription);
-	return $c->redirect_to('/rs/'.$topic->slug);
+	my $user = $c->user;
+	my $uuid = $c->param('subscription');
+	my ($subscription) = @{RSS::Social::RSSUrlSubscription->free_search(
+		-join => [qw/rss_url_subscriptions.id_rss_url=rss_urls.id rss_urls/],
+		-where => {
+			'rss_urls.id_user' => $user->id,
+			'rss_url_subscriptions.uuid' => $uuid,
+		}
+	)};
+	return $c->redirect_to('/private/rss-url') if !$subscription;
+	RSS::Social::RSSUrlSubscription->delete($subscription);
+	return $c->redirect_to('/private/rss-url');
+}
+
+sub get_rss_urls {
+    my $c                    = shift;
+    my $user                 = $c->user;
+    my @rss_urls             = @{ $user->rss_urls };
+    my %url_to_subscriptions = map {
+        my $rss_url = $_;
+        {
+            $rss_url->uuid => {
+                rss_url       => $rss_url,
+                subscriptions => $rss_url->subscriptions,
+            }
+        };
+    } @rss_urls;
+    return $c->render(
+        template             => 'user/get_rss_url',
+        url_to_subscriptions => \%url_to_subscriptions
+    );
+}
+
+sub subscribe {
+    my $c            = shift;
+    my $topic_uuid   = $c->param('topic');
+    my $rss_url_uuid = $c->param('rss_url');
+    my ($topic)      = @{ RSS::Social::Topic->search( uuid => $topic_uuid ) };
+    if ( !$topic ) {
+        return $c->redirect_to('/');
+    }
+    my ($rss_url) = @{ RSS::Social::RSSUrl->search( uuid => $rss_url_uuid ) };
+    if ( !$rss_url ) {
+        return $c->redirect_to('/');
+    }
+    my $uuid                 = uuid4();
+    my $rss_url_subscription = RSS::Social::RSSUrlSubscription::Instance->new(
+        uuid       => $uuid,
+        id_topic   => $topic->id,
+        id_rss_url => $rss_url->id,
+    );
+    RSS::Social::RSSUrlSubscription->insert($rss_url_subscription);
+    return $c->redirect_to( '/rs/' . $topic->slug );
 }
 
 sub delete_message {
@@ -44,12 +78,10 @@ sub delete_message {
     my $message_uuid = $c->param('uuid');
     my ($message) = @{ RSS::Social::Messages->search( uuid => $message_uuid ) };
     if ( !defined $message ) {
-        say 'hola';
         return $c->redirect_to('/');
     }
     my ($message_user) = @{ $message->authors };
     if ( !defined $message_user || $c->user->uuid ne $message_user->uuid ) {
-        say 'hola';
         return $c->redirect_to('/');
     }
     my ($topic) = @{ $message->topics };

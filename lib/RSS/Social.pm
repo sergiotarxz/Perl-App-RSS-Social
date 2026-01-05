@@ -43,6 +43,10 @@ sub startup {
     $ar->post('/user/bio')->to('User#update_bio');
     $ar->post('/message/:uuid/delete')->to('User#delete_message');
     $ar->post('/subscribe')->to('User#subscribe');
+    $ar->post('/rss-url/name')->to('RSSUrl#update_name');
+    $ar->post('/rss-url/description')->to('RSSUrl#update_description');
+    $ar->post('/subscription/delete')->to('User#unsubscribe');
+    $ar->get('/rss-url')->to('User#get_rss_urls');
 }
 
 sub new {

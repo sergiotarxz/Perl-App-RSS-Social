@@ -1,0 +1,35 @@
+% layout 'root';
+% use RSS::Social::Form;
+% my $url_to_subscriptions = stash 'url_to_subscriptions';
+<div class="titles">
+	<h1>RSS::Social - Manage your urls</h1>
+% for my $url_to_subscription (keys %$url_to_subscriptions) {
+%	my $url_to_subscription = $url_to_subscriptions->{$url_to_subscription};
+% 	my $url                 = $url_to_subscription->{rss_url};
+% 	my $subscriptions       = $url_to_subscription->{subscriptions};
+	<details>
+		<summary><%=$url->name%></summary>
+% 	my $form = RSS::Social::Form->new(action => '/private/rss-url/name', method => 'post');
+%==     $form->start;
+%==	$form->input(name => 'uuid', default_value => $url->uuid, type => 'hidden');
+%==	$form->input(name => 'name', description => 'Change name', default_value => $url->name, pattern => '^.{5,}$', title => 'Name must have 5 characters');
+%==	$form->input(name => 'submit', default_value => 'Change name', type => 'submit');
+%==     $form->end;
+% 	$form = RSS::Social::Form->new(action => '/private/rss-url/description', method => 'post');
+%==     $form->start;
+%==	$form->input(name => 'uuid', default_value => $url->uuid, type => 'hidden');
+%==	$form->textarea(name => 'description', description => 'Change description', default_value => $url->description, pattern => '^.{5,}$', title => 'Description must have 5 characters');
+%==	$form->input(name => 'submit', default_value => 'Change description', type => 'submit');
+%==     $form->end;
+		<ul>
+% 	for my $subscription (@$subscriptions) {
+%		my ($topic) = @{$subscription->topics};
+			<li><%=$topic->name%> <form style="display: inline-block;" action="/private/subscription/delete" method="post">
+				<input name="subscription" value="<%=$subscription->uuid%>" hidden/>
+				<button type="submit">Unsubscribe</button>
+			</form></li>
+% 	}
+		</ul>
+	</details>
+% }
+</div>
