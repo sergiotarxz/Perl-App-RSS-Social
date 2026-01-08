@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use DBIx::Quick;
-RSS::Social::DB
+use RSS::Social::DB;
 use UUID qw/uuid4/;
 
 sub dbh {

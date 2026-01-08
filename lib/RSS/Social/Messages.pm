@@ -6,6 +6,7 @@ use warnings;
 
 use DBIx::Quick;
 use RSS::Social::DB;
+use RSS::Social::DB::Converter::UTF8;
 use UUID qw/uuid4/;
 
 sub dbh {
@@ -28,7 +29,7 @@ field id_topic => (
     required => 1,
     fk       => [qw/RSS::Social::Topic id topics messages/]
 );
-field text => ( is => 'rw', required => 1 );
+field text => ( is => 'rw', required => 1, converter => RSS::Social::DB::Converter::UTF8->new);
 field image_url => ( is => 'rw', search => 1 );
 field upvotes => ( is => 'rw', search => 1 );
 field downvotes => ( is => 'rw', search => 1 );

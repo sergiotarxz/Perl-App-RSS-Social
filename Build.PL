@@ -20,6 +20,8 @@ my $build = Module::Build->new(
         'DateTime::Format::Pg'       => 0,
         'DateTime'                   => 0,
         'DateTime::Format::Duration' => 0,
+        'Wiki::JSON'                 => 0,
+        'Cpanel::JSON::XS'           => 0,
     },
 );
 $build->create_build_script;
