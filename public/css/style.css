@@ -114,8 +114,8 @@ nav.main-menu a.link {
 	margin-right: 5px;;
 }
 
-div.list-topics article,
-	div.list-topic-messages article {
+div.list-topics > article,
+	div.list-topic-messages > article {
 	background: #ECF3F9;
 	padding: 20px;
 	border-radius: 5px;

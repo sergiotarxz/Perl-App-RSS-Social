@@ -73,13 +73,14 @@ instance_sub _get_messages => sub {
     my $self = shift;
     my @items;
     for my $message ( @{ $self->_get_messages_raw } ) {
+        say RSS::Social::MessageFormatter->new->render($message);
         my ($topic) = @{ $message->topics };
         push @items,
           RSS::Social::RSSItem->new(
             title => 'Message in topic '
               . $topic->name . ': '
               . substr( $message->text, 0, 20 ),
-            description => $message->text,
+            description => RSS::Social::MessageFormatter->new->render($message),
             link        => RSS::Social->new->config->{base_url} . '/rs/'
               . $topic->slug
               . '/message/'
@@ -91,8 +92,9 @@ instance_sub _get_messages => sub {
 
 instance_sub rss_items => sub {
     my $self = shift;
+    my @messages = $self->_get_messages;
     $self->_update_last_fetch;
-    return $self->_get_messages;
+    return @messages;
 };
 
 sub recover_auth {

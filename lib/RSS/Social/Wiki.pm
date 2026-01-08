@@ -68,7 +68,6 @@ sub _start_server {
     my ($self) = @_;
     pipe my ( $read_from_client, $write_to_server );
     pipe my ( $read_from_server, $write_to_client );
-    say 'HEEEEEEY';
     $self->_write_to_server($write_to_server);
     $self->_read_from_server($read_from_server);
     my $parent_pid = $$;

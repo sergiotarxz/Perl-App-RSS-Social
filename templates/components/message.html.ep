@@ -2,27 +2,10 @@
 % my ($topic) = @{$message->topics};
 <article class="message">
 % 	my ($user) = @{$message->authors};
-	<h1><a href="/profile/<%=$user->user_name // $user->uuid%>"><%= $user->user_name // $user->uuid %></a> wrote:</h1>
+	<p><a href="/profile/<%=$user->user_name // $user->uuid%>"><%= $user->user_name // $user->uuid %></a> wrote:</p>
     <div class="message-content">
-% use RSS::Social::Wiki;
-% use Data::Dumper;
-% my $parser = RSS::Social::Wiki->singleton;
-% my @tags = @{$parser->parse($message->text)};
-% print Data::Dumper::Dumper $message->text;
-% print Data::Dumper::Dumper \@tags;
-% for my $tag (@tags) {
-<%   if (!ref $tag) {
-        %><%= $tag %><%
-       next;
-   } 
-   if ($tag->{status} eq 'open') {
-        %><<%=$tag->{tag}%><% for my $attr (keys %{$tag->{attrs}}) { %> <%=$attr%>="<%=$tag->{attrs}{$attr}%>"<% } %>><%
-   }
-   if ($tag->{status} eq 'close') {
-        %></<%=$tag->{tag}%>><%
-   }
- }
-%>
+% use RSS::Social::MessageFormatter;
+%== RSS::Social::MessageFormatter->new->render($message);
     </div>
 	<nav><%
 if (!defined user || $user->uuid eq user->uuid) {

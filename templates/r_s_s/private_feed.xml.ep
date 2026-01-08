@@ -15,7 +15,7 @@
 			<link><%= $item->link %></link>
 			<guid><%= $item->guid %></guid>
 			<pubDate><%= $item->pub_date %></pubDate>
-			<description><%= $item->description %></description>
+			<description><%== $item->description %></description>
 		</item>
 % }
 	</channel>
