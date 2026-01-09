@@ -35,6 +35,7 @@ sub view_message {
 sub visit {
     my ($self)  = @_;
     my $slug    = $self->param('slug');
+    my $preview    = $self->param('preview');
     my ($topic) = @{ RSS::Social::Topic->search(
             slug => $slug,
         )
@@ -47,7 +48,7 @@ sub visit {
             -order_by => 'messages.created DESC',
         )
     };
-    $self->render( topic => $topic, messages => \@messages );
+    $self->render( topic => $topic, messages => \@messages, preview => $preview );
 }
 
 sub get_create_topic {
@@ -88,8 +89,17 @@ sub post_new_message {
     my $self       = shift;
     my $message    = $self->param('message');
     my $topic_uuid = $self->param('topic');
+    my $type       = $self->param('submit');
     my ($topic) =
       @{ RSS::Social::Topic->search( uuid => $topic_uuid ) };
+    if (!defined $topic) {
+        return $self->reply->not_found;
+    }
+    if ($type eq 'Preview') {
+        my $url = Mojo::URL->new($self->base_url."/rs/".$topic->slug);
+        $url->query(preview => $message);
+        return $self->redirect_to($url);
+    }
     my $uuid = uuid4();
     RSS::Social::Messages->insert(
         RSS::Social::Messages::Instance->new(

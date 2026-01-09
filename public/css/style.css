@@ -10,6 +10,11 @@ article.message form {
 	display: inline-block;
 }
 
+nav input[type="submit"] {
+    display: inline;
+    margin-right: 5px;
+}
+
 article.message > nav > * {
 	margin: 5px;
 }
@@ -173,6 +178,17 @@ form > label {
 form textarea {
 	max-width: calc(100% - 15px);
 	margin-right: 7.5px;
+}
+
+form div.message-area textarea {
+    max-width: 50%;
+    display: inline-block;
+}
+
+div.message-preview {
+    max-width: 50%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 @media (min-width: 530px) {

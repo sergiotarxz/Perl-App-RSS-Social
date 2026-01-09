@@ -6,6 +6,7 @@ use warnings;
 
 use DBIx::Quick;
 use RSS::Social::DB;
+use RSS::Social::MessageFormatter;
 use UUID qw/uuid4/;
 
 sub dbh {

@@ -31,7 +31,10 @@ sub _build__template {
        next;
    } 
    if ($tag->{status} eq 'open') {
-        %><<%=$tag->{tag}%><% for my $attr (keys %{$tag->{attrs}}) { %> <%=$attr%>="<%=$tag->{attrs}{$attr}%>"<% } %>><%
+        %><<%=$tag->{tag}%><%
+        for my $attr (keys %{$tag->{attrs}}) { 
+            %> <%=$attr%>="<%=$tag->{attrs}{$attr}%>"<%
+         } %>><%
    }
    if ($tag->{status} eq 'close') {
         %></<%=$tag->{tag}%>><%
@@ -43,7 +46,12 @@ EOF
 
 sub render {
     my ( $self, $message ) = @_;
-    my @tags     = @{$self->_parser->parse( $message->text )};
+    return $self->render_text($message->text);
+}
+
+sub render_text {
+    my ( $self, $text ) = @_;
+    my @tags     = @{$self->_parser->parse( $text )};
     my $template = $self->_template;
     return $self->_templater->render( $template, @tags );
 }

@@ -33,6 +33,7 @@ sub input {
     my $pattern       = $params{pattern};
     my $title         = $params{title};
     my $required      = $params{required};
+    my $br            = $params{br} // 1;
     my $id            = "input-form-$name-@{[$id_counter++]}";
     return (
 "<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>"
@@ -44,7 +45,8 @@ sub input {
       . ( "title=\"@{[xml_escape $title]}\" " x !!$title )
       . ( "id=\"@{[xml_escape $id]}\" " x !!$id )
       . ( "value=\"@{[xml_escape $default_value]}\"" x !!$default_value )
-      . ( "required " x !!$required ) . '/>' . '<br/>';
+      . ( "required " x !!$required ) . '/>'
+      . ( '<br/>' x !!$br );
 }
 
 sub textarea {
@@ -58,6 +60,7 @@ sub textarea {
     my $class         = $params{class};
     my $pattern       = $params{pattern};
     my $title         = $params{title};
+    my $br            = $params{br};
     my $id            = "textarea-form-$name-@{[$id_counter++]}";
     return (
 "<label for=\"@{[xml_escape $id]}\" >@{[xml_escape $description]}: </label>"
@@ -69,7 +72,8 @@ sub textarea {
       . ( "title=\"@{[xml_escape $title]}\" " x !!$title )
       . ( "placeholder=\"@{[xml_escape $placeholder]}\" " x !!$placeholder )
       . ( "id=\"@{[xml_escape $id]}\" " x !!$id )
-      . ">@{[xml_escape($default_value) // '']}</textarea>" . '<br/>';
+      . ">@{[xml_escape($default_value) // '']}</textarea>"
+      . ( '<br/>' x !!$br );
 }
 
 sub end {
