@@ -10,6 +10,9 @@
 	<nav><%
 if (!defined user || $user->uuid eq user->uuid) {
 		%><form action="/private/message/<%=$message->uuid%>/delete" method="post"><button type="submit">Delete</button></form><%
+		%><form action="/private/message/<%=$message->uuid%>/edit" method="get"><button type="submit">Edit</button></form><%
 }
-	%><a href="/rs/<%=$topic->slug%>/message/<%=$message->uuid%>">Permalink</a></nav>
+        %><a href="/rs/<%=$topic->slug%>/message/<%=$message->uuid%>">Permalink</a><%
+        %><a href="/rs/<%=$topic->slug%>/message/<%=$message->uuid%>/raw">View message source</a><%
+    %></nav>
 </article>

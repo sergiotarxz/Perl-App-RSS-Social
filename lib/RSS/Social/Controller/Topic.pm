@@ -11,31 +11,97 @@ use RSS::Social::User;
 use RSS::Social::Controller::Log;
 use UUID qw/uuid4/;
 
-sub view_message {
+sub post_edit {
     my $self         = shift;
-    my $slug         = $self->param('topic_slug');
     my $message_uuid = $self->param('message_uuid');
-    my ($topic) = @{ RSS::Social::Topic->search(
-            slug => $slug,
-        )
-    };
-    if (!defined $topic) {
-	    return $self->redirect_to('/');
+    my $message_text = $self->param('message');
+    my $type         = $self->param('submit');
+    my $user         = $self->user;
+    my ($message)    = @{RSS::Social::Messages->search( uuid => $message_uuid, )};
+    if ( $user->id != $message->id_user_creator ) {
+        return $self->reply->not_found;
+    }
+    my ($topic) = @{$message->topics};
+    if ( $type eq 'Preview' ) {
+        my $url = Mojo::URL->new(
+            $self->base_url . "/private/message/" . $message->uuid . '/edit' );
+        $url->query( to_preview => $message_text );
+        $url->fragment('new-message-area-topic');
+        return $self->redirect_to($url);
+    }
+    $message->text($message_text);
+    RSS::Social::Messages->update($message, qw/text/);
+    return $self->redirect_to('/rs/'.$topic->slug.'/message/'.$message->uuid);
+}
+
+sub get_edit {
+    my $self         = shift;
+    my $user         = $self->user;
+    my $message_uuid = $self->param('message_uuid');
+    my $to_preview   = $self->param('to_preview');
+    if ( !defined $user ) {
+        return $self->reply->not_found;
     }
     my ($message) = @{ RSS::Social::Messages->search(
             uuid => $message_uuid,
         )
     };
-    if (!defined $message) {
-	    return $self->redirect_to('/rs/'.$topic->slug);
+    if ( !defined $message ) {
+        return $self->reply->not_found;
     }
-    $self->render(message => $message, topic => $topic);
+    if ( $message->id_user_creator != $user->id ) {
+        return $self->reply->not_found;
+    }
+    return $self->render( message => $message, to_preview => $to_preview );
+}
+
+sub view_message_raw {
+    my $self         = shift;
+    my $slug         = $self->param('topic_slug');
+    my $message_uuid = $self->param('message_uuid');
+    my ($topic)      = @{ RSS::Social::Topic->search(
+            slug => $slug,
+        )
+    };
+    if ( !defined $topic ) {
+        return $self->redirect_to('/');
+    }
+    my ($message) = @{ RSS::Social::Messages->search(
+            uuid => $message_uuid,
+        )
+    };
+    if ( !defined $message ) {
+        return $self->redirect_to( '/rs/' . $topic->slug );
+    }
+    $self->res->headers->content_type('text/plain');
+    $self->render( text => $message->text );
+}
+
+sub view_message {
+    my $self         = shift;
+    my $slug         = $self->param('topic_slug');
+    my $message_uuid = $self->param('message_uuid');
+    my ($topic)      = @{ RSS::Social::Topic->search(
+            slug => $slug,
+        )
+    };
+    if ( !defined $topic ) {
+        return $self->redirect_to('/');
+    }
+    my ($message) = @{ RSS::Social::Messages->search(
+            uuid => $message_uuid,
+        )
+    };
+    if ( !defined $message ) {
+        return $self->redirect_to( '/rs/' . $topic->slug );
+    }
+    $self->render( message => $message, topic => $topic );
 }
 
 sub visit {
     my ($self)  = @_;
     my $slug    = $self->param('slug');
-    my $preview    = $self->param('preview');
+    my $preview = $self->param('preview');
     my ($topic) = @{ RSS::Social::Topic->search(
             slug => $slug,
         )
@@ -48,7 +114,11 @@ sub visit {
             -order_by => 'messages.created DESC',
         )
     };
-    $self->render( topic => $topic, messages => \@messages, preview => $preview );
+    $self->render(
+        topic      => $topic,
+        messages   => \@messages,
+        to_preview => $preview
+    );
 }
 
 sub get_create_topic {
@@ -92,12 +162,13 @@ sub post_new_message {
     my $type       = $self->param('submit');
     my ($topic) =
       @{ RSS::Social::Topic->search( uuid => $topic_uuid ) };
-    if (!defined $topic) {
+    if ( !defined $topic ) {
         return $self->reply->not_found;
     }
-    if ($type eq 'Preview') {
-        my $url = Mojo::URL->new($self->base_url."/rs/".$topic->slug);
-        $url->query(preview => $message);
+    if ( $type eq 'Preview' ) {
+        my $url = Mojo::URL->new( $self->base_url . "/rs/" . $topic->slug );
+        $url->query( preview => $message );
+        $url->fragment('new-message-area-topic');
         return $self->redirect_to($url);
     }
     my $uuid = uuid4();

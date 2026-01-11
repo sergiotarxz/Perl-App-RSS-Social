@@ -1,8 +1,10 @@
 % layout 'root';
 % use RSS::Social::Form;
 % use RSS::Social::RSSUrl;
-% my $topic = stash('topic');
-% my @messages = @{stash('messages')};
+% my $topic      = stash('topic');
+% my $user       = stash('user');
+% my $to_preview = stash('to_preview');
+% my @messages   = @{stash('messages')};
 % my @urls;
 % if (defined user) {
 %     OUTER: for my $rss_url (@{user->rss_urls}) {
@@ -30,30 +32,7 @@ if (defined user() && scalar @urls) {
 }
 	%></nav>
 </div>
-<div class="new-message-topic">
-% if (defined user) {
-	<h2>New message</h2>
-% my $form = RSS::Social::Form->new(action => '/private/topic/new-message', method => 'post');
-%== $form->start;
-%== $form->input(name => 'topic', type => 'hidden', default_value => $topic->uuid);
-    <div class="message-area">
-% my $to_preview = stash 'preview';
-%== $form->textarea(name => 'message', placeholder => 'Write your thoughts', br => 0, ((default_value => $to_preview) x !!defined $to_preview));
-        <div class="message-preview">
-%       if (defined $to_preview) {
-%== RSS::Social::MessageFormatter->new->render_text($to_preview);
-%       }
-        </div>
-    </div>
-    <nav><%==
-    $form->input(name => 'submit', default_value => 'Send', type => 'submit', br => 0);%><%==
-    $form->input(name => 'submit', default_value => 'Preview', type => 'submit', br => 0);
-    %></nav>
-%== $form->end;
-% } else {
-	<h2 style="padding: 30px;">Login to publish a message</h2>
-% }
-</div>
+%= include 'components/new-message-box', topic => $topic, user => $user, to_preview => $to_preview;
 <div class="list-topic-messages">
 % for my $message (@messages) {
 %=	include 'components/message', message => $message;

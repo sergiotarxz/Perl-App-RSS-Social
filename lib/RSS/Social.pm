@@ -23,6 +23,7 @@ sub startup {
     $r->get('/fast-login/:uuid/:secret')->to('User#fast_login');
     $r->get('/profile/:user_identifier')->to('User#public_profile');
     $r->get('/rs/:topic_slug/message/:message_uuid')->to('Topic#view_message');
+    $r->get('/rs/:topic_slug/message/:message_uuid/raw')->to('Topic#view_message_raw');
     my $ar = $r->under(
         '/private',
         sub {
@@ -47,6 +48,8 @@ sub startup {
     $ar->post('/rss-url/description')->to('RSSUrl#update_description');
     $ar->post('/subscription/delete')->to('User#unsubscribe');
     $ar->get('/rss-url')->to('User#get_rss_urls');
+    $ar->get('/message/:message_uuid/edit')->to('Topic#get_edit');
+    $ar->post('/topic/edit-message')->to('Topic#post_edit');
 }
 
 sub new {

@@ -1,0 +1,9 @@
+% layout 'root';
+% my $message = stash 'message';
+% my $to_preview = stash 'to_preview';
+% my ($topic) = @{$message->topics};
+<div class="titles">
+	<h1>RSS::Social - Editing message in "<%=$topic->name%>"</h1>
+	<p><%= $topic->description%></p>
+</div>
+%= include 'components/new-message-box', topic => $topic, user => user(), to_preview => $to_preview, message => $message;

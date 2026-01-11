@@ -1,0 +1,37 @@
+% use RSS::Social::Form;
+% my $user            = stash 'user';
+% my $to_preview      = stash 'to_preview';
+% my $topic           = stash 'topic';
+% my $message_to_edit = stash 'message';
+% my $url             = '/private/topic/new-message';
+% $to_preview         //= $message_to_edit->text;
+% if (defined $message_to_edit) {
+%   $url = '/private/topic/edit-message';
+% }
+<div class="new-message-topic">
+% if (defined user) {
+	<h2>New message</h2>
+% my $form = RSS::Social::Form->new(action => $url, method => 'post');
+%== $form->start;
+% if (defined $message_to_edit) {
+%== $form->input(name => 'message_uuid', type => 'hidden', default_value => $message_to_edit->uuid);
+% }
+%== $form->input(name => 'topic', type => 'hidden', default_value => $topic->uuid);
+    <div class="message-area" id="new-message-area-topic">
+%== $form->textarea(name => 'message', placeholder => 'Write your thoughts', br => 0, ((default_value => $to_preview) x !!defined $to_preview));
+        <div class="message-preview">
+%       if (defined $to_preview) {
+%== RSS::Social::MessageFormatter->new->render_text($to_preview);
+%       }
+        </div>
+    </div>
+    <nav><%==
+    $form->input(name => 'submit', default_value => 'Send', type => 'submit', br => 0);%><%==
+    $form->input(name => 'submit', default_value => 'Preview', type => 'submit', br => 0);
+    %></nav>
+%== $form->end;
+% } else {
+	<h2 style="padding: 30px;">Login to publish a message</h2>
+% }
+</div>
+
