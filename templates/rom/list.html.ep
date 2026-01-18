@@ -7,7 +7,7 @@
 
     <ul>
 % for my $rom (@{user()->roms}) {
-        <li><a href="/private/play/<%=$rom->name%>"><%= $rom->name %></a></li>
+        <li><a href="/private/play/<%=$rom->name%>"><%= $rom->name %></a> <a href="/private/save/download/<%=$rom->name%>">Download Save</a> <a href="/private/rom/download/<%=$rom->name%>">Download ROM</a></li>
 % }
     </ul>
 </div>

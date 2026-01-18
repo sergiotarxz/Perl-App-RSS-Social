@@ -3,7 +3,7 @@
 % my $rom_name = stash 'rom_name';
 
 <div class="titles">
-    <h1>RSS::Social - Play your rom</h1>
+    <h1>RSS::Social - Play your ROM</h1>
     <input type="hidden" id="rom-name" value="<%=$rom_name%>"/>
     <label for="fast-forward-speed">Fast-Forward speed</label>
     <select id="fast-forward-speed">

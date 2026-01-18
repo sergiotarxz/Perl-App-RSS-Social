@@ -76,7 +76,7 @@ sub startup {
         if (!defined $rom->save) {
             return $c->reply->not_found;
         }
-        $c->res->headers->content_disposition('attachment; filename=' . $rom->name.'.gba');
+        $c->res->headers->content_disposition('attachment; filename=' . $rom->name.'.sav');
         $c->render( data => $rom->save );
     });
     $ar->post('/save/push/:name', sub {
