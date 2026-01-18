@@ -80,13 +80,23 @@ function start(bytes, canvas_id, save_data) {
         Module.FS.writeFile(save, save_data ?? '');
     }
     Module.loadGame('/data/games/rom.gba', save);
-    Module.setFastForwardMultiplier(1);
     const fastForwardSelector = document.querySelector('#fast-forward-speed');
+    Module.setFastForwardMultiplier(fastForwardSelector.options[fastForwardSelector.selectedIndex].value);
     fastForwardSelector.addEventListener('change', () => {
         Module.setFastForwardMultiplier(fastForwardSelector.options[fastForwardSelector.selectedIndex].value);
     });
     Module.toggleInput(false);
-    Module.setVolume(0);
+    const volumeSelector = document.querySelector('#volume-selector');
+    Module.setVolume(volumeSelector.options[volumeSelector.selectedIndex].value);
+    volumeSelector.addEventListener('change', () => {
+        Module.setVolume(volumeSelector.options[volumeSelector.selectedIndex].value);
+    });
+
+    let last_value = false;
+    document.getElementById('canvas-container').addEventListener('click', (e) => {
+        last_value = !last_value;
+        Module.toggleInput(last_value);
+    });
     document.getElementById('canvas-container').addEventListener('contextmenu', (e) => {
         console.log('hola');
         e.preventDefault();

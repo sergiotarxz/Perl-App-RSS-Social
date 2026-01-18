@@ -12,6 +12,17 @@
         <option value="4">4</option>
         <option value="6">6</option>
     </select>
+    <label for="volume-selector">Volume Selector</label>
+    <select id="volume-selector">
+        <option value="0">0</option>
+        <option value="0.125">12.5</option>
+        <option value="0.25">25</option>
+        <option value="0.5">50</option>
+        <option value="0.75">75</option>
+        <option value="1">100</option>
+        <option value="1.5">150</option>
+        <option value="2">200</option>
+    </select>
     <div id="canvas-container">
         <canvas id="screen"></canvas>
         <button class="gba-button gba-button-a">A</button>
