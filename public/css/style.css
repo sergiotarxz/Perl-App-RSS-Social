@@ -379,6 +379,7 @@ div#canvas-container:fullscreen button.gba-button.gba-button-pad {
 
 div#canvas-container {
     width: 100%;
+    max-width: 900px;
 }
 
 canvas#screen {
