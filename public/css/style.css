@@ -58,7 +58,7 @@ div.head-banner p {
 nav.main-menu {
 	width: 100%;
 	background: #D34E4E;
-	height: 70px;
+	height: fit-content;
 	position: relative;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -191,11 +191,6 @@ div.message-preview {
     vertical-align: top;
 }
 
-@media (min-width: 530px) {
-	nav.main-menu {
-	       	height: 40px;
-	}
-}
 div#canvas-container:fullscreen {
     height: 100%;
     width: 100%;
