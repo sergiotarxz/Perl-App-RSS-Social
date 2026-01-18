@@ -109,20 +109,22 @@ function start(bytes, canvas_id, save_data) {
         let last_digest;
         window.setInterval(async () => {
             const save = Module.getSave();
-            const hash = new Uint8Array(await window.crypto.subtle.digest("SHA-256", save)).toHex();
-            if (last_digest != null && hash !== last_digest) {
-                const formData = new FormData();
-                formData.append('date', Module.FS.stat('/rom.sav').mtime.toISOString());
-                formData.append('save', new Blob([Module.getSave()]));
-                fetch('/private/save/push/'
-                        + document.querySelector('#rom-name').value, {
-                    method: 'post',
-                    body: formData,
-                }).then((res) => {
-                    console.log('Save upload response: ' + res.status);
-                });
-            }    
-            last_digest = hash;
+            if (save != null) {
+                const hash = new Uint8Array(await window.crypto.subtle.digest("SHA-256", save)).toHex();
+                if (last_digest != null && hash !== last_digest) {
+                    const formData = new FormData();
+                    formData.append('date', Module.FS.stat('/rom.sav').mtime.toISOString());
+                    formData.append('save', new Blob([Module.getSave()]));
+                    fetch('/private/save/push/'
+                            + document.querySelector('#rom-name').value, {
+                        method: 'post',
+                        body: formData,
+                    }).then((res) => {
+                        console.log('Save upload response: ' + res.status);
+                    });
+                }    
+                last_digest = hash;
+            }
         }, 5000);
     };
     addListenersButtons('a');
