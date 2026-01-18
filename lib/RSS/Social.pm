@@ -94,6 +94,9 @@ sub startup {
         RSS::Social::UserRom->update($rom, qw/last_save save/);
         $c->render( text => 'ok' );
     });
+    $ar->get('/gba', sub {
+        shift->render(template => 'rom/list');
+    });
     $ar->get('/rom/download/:name', sub {
         my $c = shift;
         my $user = $c->user;
