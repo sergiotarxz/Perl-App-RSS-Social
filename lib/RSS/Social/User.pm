@@ -12,6 +12,7 @@ use RSS::Social::DB::Converter::DateTime;
 use DateTime::Format::Duration;
 use UUID qw/uuid4/;
 
+require RSS::Social::UserRom;
 require RSS::Social::UserPermission;
 
 sub dbh {

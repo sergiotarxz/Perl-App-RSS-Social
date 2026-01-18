@@ -194,6 +194,26 @@ sub migrations {
         'ALTER TABLE topics ADD COLUMN created timestamp DEFAULT now();',
         create_index(qw/topics created/),
         # TODO: Drop users_login_urls and users_sessions and associate with rss_urls instead of users for more fine grained control
+        'CREATE TABLE user_roms (
+            id BIGSERIAL PRIMARY KEY,
+            uuid TEXT NOT NULL,
+            id_user BIGINT NOT NULL,
+            rom_sha256sum TEXT NOT NULL,
+            rom BYTEA NOT NULL,
+            save BYTEA NULL,
+            creation_time timestamp DEFAULT NOW(), 
+            last_save timestamp DEFAULT NOW(),
+            UNIQUE(uuid)
+        );',
+        create_index(qw/user_roms id/),
+        create_index(qw/user_roms uuid/),
+        create_index(qw/user_roms id_user/),
+        create_index(qw/user_roms rom_sha256sum/),
+        create_index(qw/user_roms creation_time/),
+        create_index(qw/user_roms last_save/),
+        'ALTER TABLE user_roms ADD COLUMN name TEXT NOT NULL;',
+        create_index(qw/user_roms name/),
+        'ALTER TABLE user_roms ADD CONSTRAINT user_roms_unique_name UNIQUE (name, id_user)',
     );
 }
 

@@ -1,0 +1,28 @@
+% layout 'root';
+% use RSS::Social::Form;
+% my $rom_name = stash 'rom_name';
+
+<div class="titles">
+    <h1>RSS::Social - Play your rom</h1>
+    <input type="hidden" id="rom-name" value="<%=$rom_name%>"/>
+    <div id="canvas-container">
+        <canvas id="screen"></canvas>
+        <button class="gba-button gba-button-a">A</button>
+        <button class="gba-button gba-button-b">B</button>
+        <button class="gba-button gba-button-l">L</button>
+        <button class="gba-button gba-button-r">R</button>
+        <button class="gba-button gba-button-pad gba-button-pad-up">^</button>
+        <button class="gba-button gba-button-pad gba-button-pad-down">v</button>
+        <button class="gba-button gba-button-pad gba-button-pad-right"><%='>'%></button>
+        <button class="gba-button gba-button-pad gba-button-pad-left"><%='<'%></button>
+        <button class="gba-button gba-button-start">Start</button>
+        <button class="gba-button gba-button-select">Select</button>
+    </div>
+    <a href="#" id="fullscreen-emulator">Set fullscreen</a>
+</div>
+<script>
+    var Module;
+    var mgba;
+</script>
+<script type="module" src="/js/gba.js">
+</script>

@@ -196,4 +196,183 @@ div.message-preview {
 	       	height: 40px;
 	}
 }
+div#canvas-container:fullscreen {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+}
 
+div#canvas-container:fullscreen canvas {
+    width: 100%;
+    height: 80vw;
+}
+
+@media (min-aspect-ratio: 3/4) {
+    width: 80%;
+    height: 60vw;
+}
+
+@media (min-aspect-ratio: 5/4) {
+    div#canvas-container:fullscreen canvas {
+        width: 120vh;
+        height: 100%;
+    }
+}
+
+button.gba-button {
+    display: none;
+    color: white;
+    background: rgba(10, 5, 15, 0.2);
+    width: 80px;
+    height: 80px;
+}
+
+button.gba-button:hover {
+    background: rgba(150, 130, 160, 0.9);
+}
+
+div#canvas-container:fullscreen button.gba-button {
+    display: block;
+    position: fixed;
+}
+
+button.gba-button {
+    font-size: 2rem;
+    border-radius: 50%;
+}
+
+button.gba-button-a {
+    right: 30px;
+    bottom: 100px;
+}
+button.gba-button-b {
+    right: calc(30px + 80px);
+    bottom: 20px;
+}
+button.gba-button-pad-up {
+    left: 100px;
+    bottom: 180px;
+}
+
+button.gba-button-pad-left {
+    left: 20px;
+    bottom: 100px;
+}
+
+button.gba-button-pad-right {
+    left: 180px;
+    bottom: 100px;
+}
+
+button.gba-button-pad-down {
+    left: 100px;
+    bottom: 20px;
+    
+}
+
+button.gba-button-start {
+    left: calc(50% + 5px);
+    bottom: 20px;
+    font-size: 1rem;
+    width: 120px;
+}
+
+button.gba-button-select {
+    left: calc(50% - 125px);
+    bottom: 20px;
+    font-size: 1rem;
+    width: 120px;
+}
+
+button.gba-button-r {
+    right: 10px;
+    top: 10px;
+    width: 200px;
+    border-radius: 0;
+}
+
+button.gba-button-l {
+    left: 10px;
+    top: 10px;
+    width: 200px;
+    border-radius: 0;
+}
+
+div#canvas-container:fullscreen button.gba-button.gba-button-pad {
+    border-radius: 15px;
+}
+
+@media (max-aspect-ratio: 4 / 3) {
+    button.gba-button-start {
+        height: 40px;
+        width: 80px;
+        font-size: 1rem;
+        left: calc(50% + 5px);
+        bottom: 280px;
+    }
+    button.gba-button-select {
+        height: 40px;
+        width: 80px;
+        font-size: 1rem;
+        left: calc(50% - 85px);
+        bottom: 280px;
+     }
+    button.gba-button-r {
+        width: 120px;
+        top: auto;
+    }
+
+    button.gba-button-r {
+        width: 120px;
+        top: auto;
+        bottom: 330px;
+    }
+    button.gba-button-l {
+        width: 120px;
+        top: auto;
+        bottom: 330px;
+    }
+}
+
+@media (max-width: 459px) {
+    button.gba-button {
+        width: 50px;
+        height: 50px;
+    }
+    button.gba-button-pad-down {
+        left: 80px;
+    }
+    button.gba-button-pad-left {
+        bottom: 80px;
+    }
+    button.gba-button-pad-right {
+        left: 140px;
+        bottom: 80px;
+    }
+    button.gba-button-pad-up {
+        left: 80px;
+        bottom: 140px;
+    }
+    button.gba-button-a {
+        width: 80px;
+        height: 80px;
+    }
+
+    button.gba-button-b {
+        width: 80px;
+        height: 80px;
+    }
+
+    button.gba-button-start {
+        bottom: 200px;
+        width: 80px;
+        height: 40px;
+    }
+    button.gba-button-select {
+        bottom: 200px;
+        width: 80px;
+        height: 40px;
+    }
+}

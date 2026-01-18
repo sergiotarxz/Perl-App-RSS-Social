@@ -1,0 +1,6 @@
+[submodule "pokefirered"]
+	path = pokefirered
+	url = https://github.com/pret/pokefirered
+[submodule "Perl-Randomize-Firered"]
+	path = Perl-Randomize-Firered
+	url = https://github.com/sergiotarxz/Perl-Randomize-Firered

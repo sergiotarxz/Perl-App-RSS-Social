@@ -1,0 +1,14 @@
+% layout 'root';
+% use RSS::Social::Form;
+
+<div class="titles">
+    <h1>RSS::Social - Create a new Pokemon FireRed randomized rom</h1>
+
+    <form action="/private/rom/randomize" method="post">
+% my $form = RSS::Social::Form->new(action => '/private/user/username', method => 'post');
+%== $form->start;
+%==     $form->input(name => 'name', description => 'Name of the ROM', type => 'text', pattern => '^[a-zA-Z0-9 _.]{3,}$', title => 'At least 3 characters alphanumeric', required => 1);
+%==     $form->input(name => 'submit', type => 'submit', default_value => 'Create ROM' );
+%== $form->end;
+    </form>
+</div>

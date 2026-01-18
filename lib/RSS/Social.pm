@@ -5,6 +5,9 @@ use strict;
 use warnings;
 
 use Mojo::Base 'Mojolicious';
+use DateTime::Format::ISO8601;
+use DateTime;
+use DBD::Pg qw(:pg_types);
 
 sub startup {
     require RSS::Social::Messages;
@@ -50,6 +53,86 @@ sub startup {
     $ar->get('/rss-url')->to('User#get_rss_urls');
     $ar->get('/message/:message_uuid/edit')->to('Topic#get_edit');
     $ar->post('/topic/edit-message')->to('Topic#post_edit');
+    $ar->get('/rom/randomize')->to('Rom#randomize');
+    $ar->post('/rom/randomize')->to('Rom#post_randomize');
+    $ar->get('/play/:name', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my ($rom) = @{RSS::Social::UserRom->search(id_user => $user->id, name => $c->param('name'))};
+        if (!defined $rom) {
+            return $c->reply->not_found;
+        }
+        $c->res->headers->header('Cross-Origin-Opener-Policy', 'same-origin');
+        $c->res->headers->header('Cross-Origin-Embedder-Policy', 'require-corp');
+        $c->render( template => 'rom/play', rom_name => $c->param('name'));
+    });
+    $ar->get('/save/download/:name', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my ($rom) = @{RSS::Social::UserRom->search(id_user => $user->id, name => $c->param('name'))};
+        if (!defined $rom) {
+            return $c->reply->not_found;
+        }
+        if (!defined $rom->save) {
+            return $c->reply->not_found;
+        }
+        $c->res->headers->content_disposition('attachment; filename=' . $rom->name.'.gba');
+        $c->render( data => $rom->save );
+    });
+    $ar->post('/save/push/:name', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my $date = $c->param('date');
+        $date = DateTime::Format::ISO8601->parse_datetime($date);
+        my $save = $c->req->upload('save');
+        my ($rom) = @{RSS::Social::UserRom->search(id_user => $user->id, name => $c->param('name'), last_save => { '<' => $date })};
+        if (!defined $rom) {
+            return $c->render( text => 'not ok: no rom older save', code => 400 );
+        }
+        $rom->save([{dbd_attrs => { pg_type => PG_BYTEA }}, $save->slurp]);
+        $rom->last_save(DateTime->now);
+        RSS::Social::UserRom->update($rom, qw/last_save save/);
+        $c->render( text => 'ok' );
+    });
+    $ar->get('/rom/download/:name', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my ($rom) = @{RSS::Social::UserRom->search(id_user => $user->id, name => $c->param('name'))};
+        if (!defined $rom) {
+            return $c->reply->not_found;
+        }
+        $c->res->headers->content_disposition('attachment; filename=' . $rom->name.'.gba');
+        $c->render( data => $rom->rom );
+    });
+    $ar->post('/rom/:name/update_save', sub {
+    });
+    $r->get('/wasm/mgba.js', sub {
+        my $c = shift;
+        $c->res->headers->content_type('application/javascript');
+        $c->res->headers->header('Cross-Origin-Opener-Policy', 'same-origin');
+        $c->res->headers->header('Cross-Origin-Embedder-Policy', 'require-corp');
+        my $path = Path::Tiny->new('mgba.js');
+        return $c->render(text => $path->slurp_utf8);
+    });
+    $r->get('/wasm/mgba.wasm', sub {
+        my $c = shift;
+        $c->res->headers->content_type('application/wasm');
+        $c->res->headers->header('Cross-Origin-Opener-Policy', 'same-origin');
+        $c->res->headers->header('Cross-Origin-Embedder-Policy', 'require-corp');
+        use Path::Tiny;
+        my $path = Path::Tiny->new('mgba.wasm');
+        return $c->render(data => $path->slurp_raw);
+    });
+    $self->hook(before_dispatch => sub {
+        my $c = shift;
+        $c->res->headers->header('Cross-Origin-Opener-Policy', 'same-origin');
+        $c->res->headers->header('Cross-Origin-Embedder-Policy', 'require-corp');
+    });
+    $self->hook(after_static => sub {
+        my $c = shift;
+        $c->res->headers->header('Cross-Origin-Opener-Policy', 'same-origin');
+        $c->res->headers->header('Cross-Origin-Embedder-Policy', 'require-corp');
+    });
 }
 
 sub new {

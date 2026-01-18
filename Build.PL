@@ -13,6 +13,7 @@ my $build = Module::Build->new(
         'SQL::Abstract::More'        => 0,
         'DBI'                        => 0,
         'DBD::Pg'                    => 0,
+        'JSON'                       => 0,
         'Import::Into'               => 0,
         'Crypt::Bcrypt'              => 0,
         'Crypt::URandom'             => 0,
@@ -22,6 +23,9 @@ my $build = Module::Build->new(
         'DateTime::Format::Duration' => 0,
         'Wiki::JSON'                 => 0,
         'Cpanel::JSON::XS'           => 0,
+        'Path::Tiny'                 => 0,
+        'File::pushd'                => 0,
+        'DateTime::Format::ISO8601'  => 0,
     },
 );
 $build->create_build_script;
