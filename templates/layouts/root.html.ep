@@ -20,8 +20,10 @@ if (!user()) {
 if (user()) {
 					%><a class="link" href="/private/user/profile"/>Profile</a><%
 					%><a class="link" href="/private/rss-url"/>Subscriptions</a><%
-}
+					%><a class="link" href="/private/topic/create"/>New topic</a><%
+
 					%><a class="link" href="/private/gba"/>GBA</a><%
+}
 					%><a class="link" href="http://example.com"/>example</a><%
 					%><a class="link" href="http://example.com"/>example</a><%
 					%><a class="link" href="http://example.com"/>example</a>
