@@ -72,7 +72,8 @@ nav.main-menu a.circle {
 }
 
 nav.main-menu a.circle div.circle {
-	background: white;
+	background-image: url(/favicon.ico);
+    background-size: 100% 100%;
 	width: 30px;
 	height: 30px;
 	display: inline-block;
