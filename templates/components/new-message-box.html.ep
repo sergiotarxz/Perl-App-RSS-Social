@@ -4,8 +4,8 @@
 % my $topic           = stash 'topic';
 % my $message_to_edit = stash 'message';
 % my $url             = '/private/topic/new-message';
-% $to_preview         //= $message_to_edit->text;
 % if (defined $message_to_edit) {
+%   $to_preview         //= $message_to_edit->text;
 %   $url = '/private/topic/edit-message';
 % }
 <div class="new-message-topic">
