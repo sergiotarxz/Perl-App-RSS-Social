@@ -24,10 +24,7 @@ if (user()) {
 
 					%><a class="link" href="/private/gba"/>GBA</a><%
 }
-					%><a class="link" href="http://example.com"/>example</a><%
-					%><a class="link" href="http://example.com"/>example</a><%
-					%><a class="link" href="http://example.com"/>example</a>
-				</div>
+				%></div>
 			</nav>
 		</header>
 		<div class="content">
