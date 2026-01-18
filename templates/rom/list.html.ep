@@ -1,0 +1,13 @@
+% layout 'root';
+
+<div class="titles">
+    <h1>RSS::Social - List ROMs</h1>
+
+    <p><a href="/private/rom/randomize">Randomize a new run</a></p>
+
+    <ul>
+% for my $rom (@{user()->roms}) {
+        <li><a href="/private/play/<%=$rom->name%>"><%= $rom->name %></a></li>
+% }
+    </ul>
+</div>
