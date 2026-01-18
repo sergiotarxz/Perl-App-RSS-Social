@@ -9,4 +9,5 @@ use RSS::Social;
 
 # Start command line interface for application
 my $commands = Mojolicious::Commands->new;
-$commands->start_app('RSS::Social' => 'daemon');
+my @args = @{RSS::Social->new->config->{args} // []};
+$commands->start_app('RSS::Social' => 'daemon', @args);

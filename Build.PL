@@ -26,6 +26,8 @@ my $build = Module::Build->new(
         'Path::Tiny'                 => 0,
         'File::pushd'                => 0,
         'DateTime::Format::ISO8601'  => 0,
+        'DBIx::Quick'                => 0,
+        'DBIx::Auto::Migrate'        => 0,
     },
 );
 $build->create_build_script;

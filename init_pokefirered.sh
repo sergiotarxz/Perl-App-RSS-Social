@@ -3,3 +3,5 @@ git clone https://github.com/pret/agbcc
 cd agbcc
 ./build.sh
 ./install.sh ../pokefirered
+cd ../pokefirered/
+make -j6

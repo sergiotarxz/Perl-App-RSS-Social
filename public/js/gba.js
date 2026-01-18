@@ -80,7 +80,11 @@ function start(bytes, canvas_id, save_data) {
         Module.FS.writeFile(save, save_data ?? '');
     }
     Module.loadGame('/data/games/rom.gba', save);
-    Module.setFastForwardMultiplier(12);
+    Module.setFastForwardMultiplier(1);
+    const fastForwardSelector = document.querySelector('#fast-forward-speed');
+    fastForwardSelector.addEventListener('change', () => {
+        Module.setFastForwardMultiplier(fastForwardSelector.options[fastForwardSelector.selectedIndex].value);
+    });
     Module.toggleInput(false);
     Module.setVolume(0);
     document.getElementById('canvas-container').addEventListener('contextmenu', (e) => {
@@ -107,11 +111,21 @@ function start(bytes, canvas_id, save_data) {
             Module.buttonUnpress(key);
         });
         let last_digest;
+        let last_date;
         window.setInterval(async () => {
             const save = Module.getSave();
             if (save != null) {
                 const hash = new Uint8Array(await window.crypto.subtle.digest("SHA-256", save)).toHex();
-                if (last_digest != null && hash !== last_digest) {
+                let valid_last_date = true;
+                try {
+                    valid_last_date = last_date
+                        !== Module.FS.stat('/rom.sav').mtime.toISOString();
+                } catch (e) {
+                    console.log(e);
+                }
+
+                if ( valid_last_date && last_digest != null 
+                        && hash !== last_digest) {
                     const formData = new FormData();
                     formData.append('date', Module.FS.stat('/rom.sav').mtime.toISOString());
                     formData.append('save', new Blob([Module.getSave()]));
@@ -122,10 +136,11 @@ function start(bytes, canvas_id, save_data) {
                     }).then((res) => {
                         console.log('Save upload response: ' + res.status);
                     });
+                    last_date = Module.FS.stat('/rom.sav').mtime.toISOString();
                 }    
                 last_digest = hash;
             }
-        }, 5000);
+        }, 1000);
     };
     addListenersButtons('a');
     addListenersButtons('b');

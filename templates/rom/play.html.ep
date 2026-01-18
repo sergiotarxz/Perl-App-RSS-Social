@@ -5,6 +5,13 @@
 <div class="titles">
     <h1>RSS::Social - Play your rom</h1>
     <input type="hidden" id="rom-name" value="<%=$rom_name%>"/>
+    <label for="fast-forward-speed">Fast-Forward speed</label>
+    <select id="fast-forward-speed">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+    </select>
     <div id="canvas-container">
         <canvas id="screen"></canvas>
         <button class="gba-button gba-button-a">A</button>
