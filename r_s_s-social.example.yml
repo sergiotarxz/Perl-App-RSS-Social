@@ -1,3 +1,10 @@
 db:
   dbname: "rss_social"
-base_url: 'https://example.com'
+  # (Optional) Your db host, in docker this is a sane default
+  host: "host.containers.internal" 
+  # (Optional) 
+  user: "<your_postgresql_user>"
+  # (Optional)
+  password: "<secret_pass>"
+# The URL the application will have after all proxies
+base_url: 'http://localhost:3333'

@@ -8,27 +8,77 @@ This wants to be a social network focused in the RSS open protocol for user auth
 
 It will be developed in my spare time.
 
-## Prepare the project
+## Recommended Podman Development setup
 
-Run:
+### Building the container
 
 ```shell
-perl Build.PL
-perl Build installdeps
+podman build --file Dockerfile  -t rss_social
 ```
 
-## Configuration
+### Setting up the project
 
-Setup a postgresql database accesible with the current user.
+#### Setting up the database
+
+You will need a PostgreSQL server, the installation is distribution dependent, so I cannot really
+help a lot.
+
+(Your postgresql version may not match ours, but don't worry)
+
+Once you have your PostgreSQL server setup modify the `/etc/postgresql-18/pg_hba.conf` and add
+something like this:
+
+```
+host    all             all             192.168.1.69/32         password
+```
+
+Replace the IP by your ip, you can get your network IP by `ip a`.
+
+And modify `/etc/postgresql-18/postgresql.conf` and ensure the `listen` directive looks like this:
+
+```
+listen_addresses = 'localhost,192.168.1.69'		# what IP address(es) to listen on;
+```
+
+#### Create database user and database
+
+Enter your database:
+
+```shell
+sudo -u postgres psql
+```
+
+And in the root console create the needed things:
+
+```sql
+create user rss_social WITH PASSWORD 'secret';
+create database rss_social OWNER '<the user you want to create>';
+```
+
+#### Tune the app config
+
+Copy the example into the final config and edit it to your liking:
 
 ```shell
 cp r_s_s-social.example.yml r_s_s-social.yml
+vim r_s_s-social.yml
 ```
 
-Modify the "/db/dbname" key to match your current postgresql database.
+### Start playing
 
-Run the website with
+Execute the following to start the server in `http://localhost:3333`:
 
 ```shell
-perl scripts/server.pl
+podman run -p 127.0.0.1:3333:3000 -v .:/var/lib/rss_social/Perl-App-RSS-Social/ --rm -it localhost/rss_social
 ```
+
+## Some intro:
+
+To do frontend work you will need to edit the following files: `public/css/style.css`, everything under `templates` and `public/js/gba.js`.
+
+To do backend everything is under `lib`.
+
+To improve documentation `README.md` is the only related file but you could also create other kinds of documentation such as `CONTRIBUTORS.md`.
+
+Testing should be made under `t`, nothing is done yet about that, but you can improve this.
+

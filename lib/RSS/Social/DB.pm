@@ -11,23 +11,32 @@ finish_auto_migrate;
 my $dbh;
 
 {
-    my $dbname;
+    my $dsn;
 
     sub dsn {
-        if ( !defined $dbname ) {
-            require RSS::Social;
-            $dbname = RSS::Social->new->config->{db}{dbname};
+        require RSS::Social;
+        if ( !defined $dsn ) {
+            my $dbname = RSS::Social->new->config->{db}{dbname};
+            my $host   = RSS::Social->new->config->{db}{host};
+            my $port   = RSS::Social->new->config->{db}{port};
+            $dsn = "dbi:Pg:dbname=$dbname";
+            if ( defined $host ) {
+                $dsn .= ";host=$host";
+            }
+            if ( defined $port ) {
+                $dsn .= ";port=$port";
+            }
         }
-        return "dbi:Pg:dbname=$dbname";
+        return $dsn;
     }
 }
 
 sub user {
-    return undef;
+    return RSS::Social->new->config->{db}{user};
 }
 
 sub pass {
-    return undef;
+    return RSS::Social->new->config->{db}{password};
 }
 
 sub migrations {
@@ -193,7 +202,8 @@ sub migrations {
         'ALTER TABLE users ADD COLUMN bio TEXT NULL',
         'ALTER TABLE topics ADD COLUMN created timestamp DEFAULT now();',
         create_index(qw/topics created/),
-        # TODO: Drop users_login_urls and users_sessions and associate with rss_urls instead of users for more fine grained control
+
+# TODO: Drop users_login_urls and users_sessions and associate with rss_urls instead of users for more fine grained control
         'CREATE TABLE user_roms (
             id BIGSERIAL PRIMARY KEY,
             uuid TEXT NOT NULL,
@@ -213,7 +223,7 @@ sub migrations {
         create_index(qw/user_roms last_save/),
         'ALTER TABLE user_roms ADD COLUMN name TEXT NOT NULL;',
         create_index(qw/user_roms name/),
-        'ALTER TABLE user_roms ADD CONSTRAINT user_roms_unique_name UNIQUE (name, id_user)',
+'ALTER TABLE user_roms ADD CONSTRAINT user_roms_unique_name UNIQUE (name, id_user)',
     );
 }
 
