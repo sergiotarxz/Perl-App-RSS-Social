@@ -111,3 +111,23 @@ To improve documentation `README.md` is the only related file but you could also
 
 Testing should be made under `t`, nothing is done yet about that, but you can improve this.
 
+Do "backend" (wasm) GBA emulator improvements:
+
+In this project (https://github.com/thenick775/mgba) a port of mgba to webassembly
+is happening, which is actually what this project currently uses.
+
+To improve the emulator the most important files to you are (https://github.com/thenick775/mgba/blob/feature/wasm/src/platform/wasm/main.c), (https://github.com/thenick775/mgba/blob/feature/wasm/src/platform/wasm/main.h) and (https://github.com/thenick775/mgba/blob/feature/wasm/src/platform/wasm/pre.js)
+
+But what is it needed in the emulator? You may ask, well we do not have any kind
+of multiplayer supported yet in wasm, but the emulator written in C actually
+supports it very well. Multiplaying with yourself should be trivial to implement
+(Maybe renouncing to API stability) and multiplaying online with a person's browser
+being the server (Serving just the video and the controls) and the other being a
+client (Using the server's resources) can require more work, but is doable too.
+
+The current GUI is not using all the features of the emulator, things like
+cheats, remapping the keyboard or ever using a controller are still not supported
+and it would be great this to change for people interested in frontend javascript
+work.
+
+This project accepts no donations.
