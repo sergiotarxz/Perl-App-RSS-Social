@@ -11,6 +11,21 @@ It will be developed in my spare time.
 The flagship of this project is how it does integrate a GameBoy Advance emulator and a Pokémon
 ROMs randomizer to serve as a good base for Randomlocke/Dualocke communities.
 
+<details>
+<summary>Featured screenshots, not warranted to be updated</summary>
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-08-22.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-09-16.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-09-26.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-09-37.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-09-45.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-09-55.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-10-07.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-10-16.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-10-28.png)
+![](https://raw.githubusercontent.com/sergiotarxz/Perl-App-RSS-Social/refs/heads/main/Screenshots/Screenshot%20From%202026-01-20%2020-12-45.png)
+</details>
+
+
 ## Recommended Podman Development setup
 
 ### Building the container
