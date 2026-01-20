@@ -8,6 +8,9 @@ This wants to be a social network focused in the RSS open protocol for user auth
 
 It will be developed in my spare time.
 
+The flagship of this project is how it does integrate a GameBoy Advance emulator and a Pokémon
+ROMs randomizer to serve as a good base for Randomlocke/Dualocke communities.
+
 ## Recommended Podman Development setup
 
 ### Building the container
