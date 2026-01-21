@@ -3,6 +3,7 @@
 <div class="titles">
     <h1>RSS::Social - List ROMs</h1>
 
+    <p><a href="/private/rom/upload">Submit a custom ROM</a></p>
     <p><a href="/private/rom/randomize">Randomize a new run</a></p>
 
     <ul>

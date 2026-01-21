@@ -8,6 +8,9 @@ use Mojo::Base 'Mojolicious';
 use DateTime::Format::ISO8601;
 use DateTime;
 use DBD::Pg qw(:pg_types);
+use Digest::SHA qw/sha256_hex/;
+use UUID        qw/uuid4/;
+use Data::Dumper;
 
 sub startup {
     require RSS::Social::Messages;
@@ -19,6 +22,7 @@ sub startup {
             my $c = shift;
         }
     );
+    $self->max_request_size(30 * (10 ** 6));
     $r->get('/')->to('Root#index');
     $r->get('/rs/:slug')->to('Topic#visit');
     $r->get('/persist-user')->to('User#persist');
@@ -92,10 +96,38 @@ sub startup {
         $rom->save([{dbd_attrs => { pg_type => PG_BYTEA }}, $save->slurp]);
         $rom->last_save(DateTime->now);
         RSS::Social::UserRom->update($rom, qw/last_save save/);
-        $c->render( text => 'ok' );
+        $c->render( text => 'ok (But if you did this manually you are using this web wrong and will lose save data soon or later)' );
     });
     $ar->get('/gba', sub {
         shift->render(template => 'rom/list');
+    });
+    $ar->get('/rom/upload', sub {
+        shift->render(template => 'rom/upload');
+    });
+    $ar->post('/rom/upload', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my $rom = $c->req->upload('rom');
+        my $save = $c->req->upload('save');
+        my $name = $c->param('name');
+        my $sha_rom = sha256_hex($rom);
+        my $uuid                  = uuid4();
+        RSS::Social::UserRom->insert(
+            RSS::Social::UserRom::Instance->new(
+                uuid          => $uuid,
+                id_user       => $user->id,
+                name          => $name,
+                rom_sha256sum => $sha_rom,
+                rom => [ { dbd_attrs => { pg_type => PG_BYTEA } }, $rom->slurp ],
+                (
+                    (defined $save)
+                    ? (
+                        save => [ { dbd_attrs => { pg_type => PG_BYTEA } }, $save->slurp ],
+                    ) : ()
+                )
+            )
+        );
+        return $c->redirect_to("/private/play/$name");
     });
     $ar->get('/rom/download/:name', sub {
         my $c = shift;

@@ -1,0 +1,14 @@
+% layout 'root';
+% use RSS::Social::Form;
+
+<div class="titles">
+    <h1>RSS::Social - Upload new ROM</h1>
+
+% my $form = RSS::Social::Form->new(action => '/private/rom/upload', method => 'post', enctype => "multipart/form-data");
+%== $form->start;
+%==     $form->input(name => 'name', description => 'Name of the ROM', type => 'text', pattern => '^[a-zA-Z0-9 _.]{3,}$', title => 'At least 3 characters alphanumeric', required => 1);
+%==     $form->input(name => 'rom', description => 'Your .gba file', type => 'file', required => 1);
+%==     $form->input(name => 'save', description => 'Your .sav file (Optional)', type => 'file', accept => "application/octet-stream");
+%==     $form->input(name => 'submit', type => 'submit', default_value => 'Create ROM' );
+%== $form->end;
+</div>

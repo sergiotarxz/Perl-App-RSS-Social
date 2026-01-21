@@ -9,9 +9,11 @@ use Mojo::Util qw/xml_escape/;
 
 my $id_counter = 0;
 
-has action => ( is => 'ro' );
-has method => ( is => 'ro' );
-has class  => ( is => 'ro' );
+has action  => ( is => 'ro' );
+has method  => ( is => 'ro' );
+has class   => ( is => 'ro' );
+has enctype => ( is => 'ro' );
+has accept  => ( is => 'ro' );
 
 sub start {
     my $self = shift;
@@ -19,7 +21,10 @@ sub start {
         "<form "
       . ( "action=\"@{[xml_escape $self->action]}\" " x !!$self->action )
       . ( "method=\"@{[xml_escape $self->method]}\" " x !!$self->method )
-      . ( "class=\"@{[xml_escape $self->class]}\"" x !!$self->class ) . '>';
+      . ( "class=\"@{[xml_escape $self->class]}\"" x !!$self->class )
+      . ( "enctype=\"@{[xml_escape $self->enctype]}\"" x !!$self->enctype )
+      . ( "accept=\"@{[xml_escape $self->accept]}\"" x !!$self->accept )
+      . '>';
 }
 
 sub input {
