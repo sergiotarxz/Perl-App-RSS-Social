@@ -22,5 +22,6 @@ RUN su rss_social -l -c 'yes | perlbrew exec cpan -T $(cat deps)'
 
 
 RUN apt install -y iproute2
+RUN apt install -y gcc-arm-none-eabi
 USER "rss_social"
-CMD ["bash", "-l", "-c", "cd ~/Perl-App-RSS-Social; bash init_pokefirered.sh; perlbrew exec perl scripts/server.pl"]
+CMD ["bash", "-l", "-c", "cd ~/Perl-App-RSS-Social; perlbrew exec perl scripts/server.pl"]

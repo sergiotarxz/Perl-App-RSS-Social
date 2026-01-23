@@ -93,12 +93,18 @@ cp r_s_s-social.example.yml r_s_s-social.yml
 vim r_s_s-social.yml
 ```
 
+#### Prepare firered for randomizing:
+
+```shell
+podman run --userns keep-id:uid=1000 -p 127.0.0.1:3333:3000 -v .:/var/lib/rss_social/Perl-App-RSS-Social/ --rm -it localhost/rss_social bash -c 'cd ~/Perl-App-RSS-Social; bash init_pokefirered.sh';
+```
+
 ### Start playing
 
 Execute the following to start the server in `http://localhost:3333`:
 
 ```shell
-podman run -p 127.0.0.1:3333:3000 -v .:/var/lib/rss_social/Perl-App-RSS-Social/ --rm -it localhost/rss_social
+podman run --userns keep-id:uid=1000 -p 127.0.0.1:3333:3000 -v .:/var/lib/rss_social/Perl-App-RSS-Social/ --rm -it localhost/rss_social
 ```
 
 ## Some intro:
