@@ -224,6 +224,18 @@ sub migrations {
         'ALTER TABLE user_roms ADD COLUMN name TEXT NOT NULL;',
         create_index(qw/user_roms name/),
 'ALTER TABLE user_roms ADD CONSTRAINT user_roms_unique_name UNIQUE (name, id_user)',
+        'CREATE TABLE user_button_mappings (
+            id BIGSERIAL PRIMARY KEY,
+            uuid TEXT NOT NULL,
+            id_user BIGINT NOT NULL,
+            controller TEXT NOT NULL,
+            mappings JSON NOT NULL,
+            UNIQUE(uuid),
+            UNIQUE (id_user, controller)
+        )',
+        create_index(qw/user_button_mappings uuid/),
+        create_index(qw/user_button_mappings id_user/),
+        create_index(qw/user_button_mappings controller/),
     );
 }
 
