@@ -112,6 +112,77 @@ function start(bytes, canvas_id, save_data) {
         });
         document.getElementById('canvas-container').requestFullscreen();
     };
+    let id_to_gamepad = {};
+    let gamepads = navigator.getGamepads();
+    for (let gamepad of gamepads) {
+        id_to_gamepad[gamepad.id] = gamepad;
+    }
+    window.setInterval(() => {
+        let gamepads = navigator.getGamepads();
+        for (let gamepad of gamepads) {
+            id_to_gamepad[gamepad.id] = gamepad;
+        }
+    }, 1000);
+    window.setTimeout(() => {
+        let select_gamepad = document.querySelector('select#gamepad');
+        if (select_gamepad != null) {
+            select_gamepad.innerHTML = '';
+            for (let key of Object.keys(id_to_gamepad)) {
+                console.log(key);
+                const el = document.createElement('option');
+                el.value = key;
+                el.innerText = key;
+                select_gamepad.appendChild(el);
+            }
+        }
+    }, 2000);
+    let pressed = {
+        a: 0,
+        b: 0,
+        r: 0,
+        l: 0,
+        start: 0,
+        select: 0,
+        up: 0,
+        down: 0,
+        left: 0,
+        right: 0,
+    }
+    let buttons = {
+        a: 1,
+        b: 0,
+        r: 5,
+        l: 4,
+        start: 9,
+        select: 8,
+        up: 12,
+        down: 13,
+        left: 14,
+        right: 15,
+
+    };
+    window.setInterval(() => {
+        let final_presses = {};
+        for (let button in pressed) {
+            final_presses[button] = 0;
+        }
+        for (let gamepad of navigator.getGamepads()) {
+            for (let button in buttons) {
+                if (gamepad.buttons[buttons[button]].pressed) {
+                    final_presses[button] = 1;
+                }
+            }
+        } 
+        for (let button in pressed) {
+            if (final_presses[button] && !pressed[button]) {
+                Module.buttonPress(button);
+            }
+            if (!final_presses[button] && pressed[button]) {
+                Module.buttonUnpress(button);
+            }
+        }
+        pressed = final_presses;
+    }, 30);
     const addListenersButtons = (key) => {
         const button = document.querySelector('button.gba-button-' + key)
             ?? document.querySelector('button.gba-button-pad-'+key);;

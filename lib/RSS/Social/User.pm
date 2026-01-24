@@ -166,7 +166,6 @@ instance_sub rss_items => sub {
         );
     }
     my @items;
-    my $secret;
     my ( $login_url, $secret ) =
       RSS::Social::UserLoginUrl->generate_for_user($self);
     push @items,

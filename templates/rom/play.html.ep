@@ -38,6 +38,57 @@
         <button class="gba-button gba-button-select">Select</button>
     </div>
     <a href="#" id="fullscreen-emulator">Set fullscreen</a>
+
+<!-- 
+    <p>Gamepad configuration</p>
+    <select id="gamepad">
+    </select>
+    
+    <div class="controls">
+        <ul>
+            <li class="select-gamepad-a">
+                <label>A</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-b">
+                <label>B</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-l">
+                <label>L</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-r">
+                <label>R</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-start">
+                <label>Start</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-select">
+                <label>Select</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-up">
+                <label>Up</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-down">
+                <label>Down</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-left">
+                <label>Left</label>
+                <button></button>
+            </li>
+            <li class="select-gamepad-right">
+                <label>Right</label>
+                <button></button>
+            </li>
+        </ul>
+    </div>
+-->
 </div>
 <script>
     var Module;

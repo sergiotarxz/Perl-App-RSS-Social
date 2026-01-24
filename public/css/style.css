@@ -408,3 +408,6 @@ canvas#screen {
         bottom: 330px;
     }
 }
+div.controls button {
+    height: 1rem;
+}
