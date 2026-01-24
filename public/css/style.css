@@ -3,7 +3,7 @@ body {
 	min-height: 1vh;
 	padding: 0;
 	margin: 0;
-	background: #F3F2ED;
+	background: #f3f2ed;
 }
 
 article.message form {
@@ -48,7 +48,7 @@ div.head-banner p {
 	font-size: 50px;
 	display: block;
 	font-weight: bold;
-	background: #E2DCEC;
+	background: #e2dcec;
 	padding: 30px;
 	border-radius: 10px;
 	border: 5px solid black;
@@ -57,7 +57,7 @@ div.head-banner p {
 
 nav.main-menu {
 	width: 100%;
-	background: #D34E4E;
+	background: #d34e4e;
 	height: fit-content;
 	position: relative;
 	padding-top: 5px;
@@ -117,7 +117,7 @@ nav.main-menu a.link:nth-of-type(2) {
 
 nav.main-menu a.link {
 	height: 20px;
-	background: #F9E7B2;
+	background: #f9e7b2;
 	padding: 5px;
 	margin-top: 5px;
 	border-radius: 5px;
@@ -127,12 +127,12 @@ nav.main-menu a.link {
 
 div.list-topics > article,
 	div.list-topic-messages > article {
-	background: #ECF3F9;
+	background: #ecf3f9;
 	padding: 20px;
 	border-radius: 5px;
 	border: solid 5px black;
 	margin: 20px;
-	box-shadow: 10px 10px #C2D8D3;
+	box-shadow: 10px 10px #c2d8d3;
 }
 
 div.titles > * {
@@ -140,7 +140,7 @@ div.titles > * {
 }
 
 div.titles {
-	background: #EEEEFF;
+	background: #eeeeff;
 	border: solid 5px black;
 	margin: 20px;
 	box-shadow: 10px 10px #317873;
@@ -157,10 +157,10 @@ div.titles > nav > * {
 }
 
 div.new-message-topic {
-	background: #FFF5EE;
+	background: #fff5ee;
 	border: solid 5px black;
 	margin: 20px;
-	box-shadow: 10px 10px #29AB87;
+	box-shadow: 10px 10px #29ab87;
 }
 
 div.new-message-topic > * {
@@ -168,7 +168,7 @@ div.new-message-topic > * {
 }
 
 div.shadow {
-	box-shadow: 10px 10px #C2D8D3;
+	box-shadow: 10px 10px #c2d8d3;
 }
 
 form > * {
@@ -246,10 +246,10 @@ button.gba-button {
 
 button.gba-button-a {
     right: 30px;
-    bottom: 100px;
+    bottom: 90px;
 }
 button.gba-button-b {
-    right: calc(30px + 80px);
+    right: calc(30px + 70px);
     bottom: 20px;
 }
 button.gba-button-pad-up {
@@ -273,18 +273,31 @@ button.gba-button-pad-down {
     
 }
 
+button.gba-button-pad-super {
+    left: 20px; 
+    bottom: 20px;
+    width: 240px;
+    height: 240px;
+    border: none;
+}
+
+
 button.gba-button-start {
     left: calc(50% + 5px);
     bottom: 20px;
     font-size: 1rem;
-    width: 120px;
+    width: 60px;
+    height: 40px;
+    font-size: 0.8rem;
 }
 
 button.gba-button-select {
-    left: calc(50% - 125px);
+    left: calc(50% - 85px);
     bottom: 20px;
     font-size: 1rem;
-    width: 120px;
+    width: 60px;
+    height: 40px;
+    font-size: 0.8rem;
 }
 
 button.gba-button-r {
@@ -305,42 +318,14 @@ div#canvas-container:fullscreen button.gba-button.gba-button-pad {
     border-radius: 15px;
 }
 
-@media (max-aspect-ratio: 4 / 3) {
-    button.gba-button-start {
-        height: 40px;
-        width: 80px;
-        font-size: 1rem;
-        left: calc(50% + 5px);
-        bottom: 280px;
-    }
-    button.gba-button-select {
-        height: 40px;
-        width: 80px;
-        font-size: 1rem;
-        left: calc(50% - 85px);
-        bottom: 280px;
-     }
-    button.gba-button-r {
-        width: 120px;
-        top: auto;
-    }
-
-    button.gba-button-r {
-        width: 120px;
-        top: auto;
-        bottom: 330px;
-    }
-    button.gba-button-l {
-        width: 120px;
-        top: auto;
-        bottom: 330px;
-    }
-}
-
 @media (max-width: 459px) {
     button.gba-button {
         width: 50px;
         height: 50px;
+    }
+    button.gba-button-pad {
+        width: 60px;
+        height: 60px;
     }
     button.gba-button-pad-down {
         left: 80px;
@@ -386,4 +371,36 @@ div#canvas-container {
 canvas#screen {
     width: 80%;
     
+}
+
+@media (max-aspect-ratio: 4 / 3) {
+    button.gba-button-start {
+        height: 40px;
+        width: 80px;
+        font-size: 1rem;
+        left: calc(50% + 5px);
+        bottom: 280px;
+    }
+    button.gba-button-select {
+        height: 40px;
+        width: 80px;
+        font-size: 1rem;
+        left: calc(50% - 85px);
+        bottom: 280px;
+     }
+    button.gba-button-r {
+        width: 120px;
+        top: auto;
+    }
+
+    button.gba-button-r {
+        width: 120px;
+        top: auto;
+        bottom: 330px;
+    }
+    button.gba-button-l {
+        width: 120px;
+        top: auto;
+        bottom: 330px;
+    }
 }

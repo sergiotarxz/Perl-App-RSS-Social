@@ -31,6 +31,13 @@ sub startup {
     $r->get('/profile/:user_identifier')->to('User#public_profile');
     $r->get('/rs/:topic_slug/message/:message_uuid')->to('Topic#view_message');
     $r->get('/rs/:topic_slug/message/:message_uuid/raw')->to('Topic#view_message_raw');
+    $r->get('/size', sub {
+        my $c = shift;
+        my $width = $c->param('width');
+        my $height = $c->param('height');
+        say "DIMENSIONS ${width}x${height}";
+        $c->render( text => 'ok' );
+    });
     my $ar = $r->under(
         '/private',
         sub {

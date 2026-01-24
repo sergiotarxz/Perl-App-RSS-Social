@@ -29,10 +29,11 @@
         <button class="gba-button gba-button-b">B</button>
         <button class="gba-button gba-button-l">L</button>
         <button class="gba-button gba-button-r">R</button>
-        <button class="gba-button gba-button-pad gba-button-pad-up">^</button>
-        <button class="gba-button gba-button-pad gba-button-pad-down">v</button>
-        <button class="gba-button gba-button-pad gba-button-pad-right"><%='>'%></button>
-        <button class="gba-button gba-button-pad gba-button-pad-left"><%='<'%></button>
+        <button class="gba-button gba-button-pad gba-button-pad-up" disabled>^</button>
+        <button class="gba-button gba-button-pad gba-button-pad-down" disabled>v</button>
+        <button class="gba-button gba-button-pad gba-button-pad-right" disabled><%='>'%></button>
+        <button class="gba-button gba-button-pad gba-button-pad-left" disabled><%='<'%></button>
+        <button class="gba-button gba-button-pad gba-button-pad-super"></button>
         <button class="gba-button gba-button-start">Start</button>
         <button class="gba-button gba-button-select">Select</button>
     </div>

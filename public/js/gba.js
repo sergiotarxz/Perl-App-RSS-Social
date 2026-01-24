@@ -103,15 +103,72 @@ function start(bytes, canvas_id, save_data) {
     }, true);
     document.getElementById('fullscreen-emulator').onclick = () => {
         Module.toggleInput(true);
+        let url = new URL(window.location.href);
+        url.pathname = "/size";
+        url.searchParams.append('width', window.innerWidth);
+        url.searchParams.append('height', window.innerHeight);
+        fetch(url).then(() => {
+            console.log('sent width/height to server');
+        });
         document.getElementById('canvas-container').requestFullscreen();
     };
     const addListenersButtons = (key) => {
         const button = document.querySelector('button.gba-button-' + key)
             ?? document.querySelector('button.gba-button-pad-'+key);;
-        button.addEventListener('touchstart', () => {
+        button.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            if (key === 'super') {
+                Module.buttonUnpress('up');
+                Module.buttonUnpress('down');
+                Module.buttonUnpress('right');
+                Module.buttonUnpress('left');
+                const rect = button.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                const width = rect.width;
+                const height = rect.height;
+                const distances = {
+                    left:  x,
+                    right: rect.width - x,
+                    up:    y,
+                    down:  rect.height - y
+                };
+                const nearestEdge = Object.keys(distances).reduce((a, b) =>
+                  distances[a] < distances[b] ? a : b
+                );
+                Module.buttonPress(nearestEdge);
+                return;
+            }
+        });
+        button.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            if (key === 'super') {
+                const rect = button.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                const width = rect.width;
+                const height = rect.height;
+                const distances = {
+                    left:  x,
+                    right: rect.width - x,
+                    up:    y,
+                    down:  rect.height - y
+                };
+                const nearestEdge = Object.keys(distances).reduce((a, b) =>
+                  distances[a] < distances[b] ? a : b
+                );
+                Module.buttonPress(nearestEdge);
+                return;
+            }
             Module.buttonPress(key);
         });
         button.addEventListener('touchend', () => {
+            if (key === 'super') {
+                Module.buttonUnpress('up');
+                Module.buttonUnpress('down');
+                Module.buttonUnpress('right');
+                Module.buttonUnpress('left');
+            }
             Module.buttonUnpress(key);
         });
         button.addEventListener('mousedown', () => {
@@ -120,37 +177,12 @@ function start(bytes, canvas_id, save_data) {
         button.addEventListener('mouseup', () => {
             Module.buttonUnpress(key);
         });
-        let last_digest;
-        let last_date;
-        window.setInterval(async () => {
-            const save = Module.getSave();
-            if (save != null) {
-                const hash = new Uint8Array(await window.crypto.subtle.digest("SHA-256", save)).toHex();
-                let valid_last_date = true;
-                try {
-                    valid_last_date = last_date
-                        !== Module.FS.stat('/rom.sav').mtime.toISOString();
-                } catch (e) {
-                    console.log(e);
-                }
-
-                if ( valid_last_date && last_digest != null 
-                        && hash !== last_digest) {
-                    const formData = new FormData();
-                    formData.append('date', Module.FS.stat('/rom.sav').mtime.toISOString());
-                    formData.append('save', new Blob([Module.getSave()]));
-                    fetch('/private/save/push/'
-                            + document.querySelector('#rom-name').value, {
-                        method: 'post',
-                        body: formData,
-                    }).then((res) => {
-                        console.log('Save upload response: ' + res.status);
-                    });
-                    last_date = Module.FS.stat('/rom.sav').mtime.toISOString();
-                }    
-                last_digest = hash;
-            }
-        }, 1000);
+        button.addEventListener('touchcancel', () => {
+            Module.buttonUnpress(key);
+        });
+        button.addEventListener('touchmove', () => {
+            Module.buttonPress(key);
+        });
     };
     addListenersButtons('a');
     addListenersButtons('b');
@@ -158,9 +190,41 @@ function start(bytes, canvas_id, save_data) {
     addListenersButtons('r');
     addListenersButtons('start');
     addListenersButtons('select');
-    addListenersButtons('up');
-    addListenersButtons('down');
-    addListenersButtons('left');
-    addListenersButtons('right');
+    addListenersButtons('super');
+    //addListenersButtons('up');
+    //addListenersButtons('down');
+    //addListenersButtons('left');
+    //addListenersButtons('right');
+    let last_digest;
+    let last_date;
+    window.setInterval(async () => {
+        const save = Module.getSave();
+        if (save != null) {
+            const hash = new Uint8Array(await window.crypto.subtle.digest("SHA-256", save)).toHex();
+            let valid_last_date = true;
+            try {
+                valid_last_date = last_date
+                    !== Module.FS.stat('/rom.sav').mtime.toISOString();
+            } catch (e) {
+                console.log(e);
+            }
+
+            if ( valid_last_date && last_digest != null 
+                    && hash !== last_digest) {
+                const formData = new FormData();
+                formData.append('date', Module.FS.stat('/rom.sav').mtime.toISOString());
+                formData.append('save', new Blob([Module.getSave()]));
+                fetch('/private/save/push/'
+                        + document.querySelector('#rom-name').value, {
+                    method: 'post',
+                    body: formData,
+                }).then((res) => {
+                    console.log('Save upload response: ' + res.status);
+                });
+                last_date = Module.FS.stat('/rom.sav').mtime.toISOString();
+            }    
+            last_digest = hash;
+        }
+    }, 1000);
 }
 
