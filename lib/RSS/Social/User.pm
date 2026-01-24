@@ -165,28 +165,20 @@ instance_sub rss_items => sub {
             )
         );
     }
-    my ($login_url) = @{ RSS::Social::UserLoginUrl->search(
-            created => { '>', \'now() - interval \'10 minutes\'' },
-            id_user => $self->id,
-            used    => 0,
-        )
-    };
     my @items;
-    if ( !$login_url ) {
-        my $secret;
-        ( $login_url, $secret ) =
-          RSS::Social::UserLoginUrl->generate_for_user($self);
-        push @items,
-          RSS::Social::RSSItem->new(
-            title       => 'Login with this link',
-            description =>
+    my $secret;
+    my ( $login_url, $secret ) =
+      RSS::Social::UserLoginUrl->generate_for_user($self);
+    push @items,
+      RSS::Social::RSSItem->new(
+        title       => 'Login with this link',
+        description =>
 'Do not share this url with anyone or they will have access to your account',
-            link => RSS::Social->new->config->{base_url}
-              . '/fast-login/'
-              . $login_url->uuid . '/'
-              . $secret,
-          );
-    }
+        link => RSS::Social->new->config->{base_url}
+          . '/fast-login/'
+          . $login_url->uuid . '/'
+          . $secret,
+      );
     for my $rss_url_subscription (
         @{ RSS::Social::RSSUrlSubscription->free_search(
                 -join => [

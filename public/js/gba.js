@@ -137,6 +137,7 @@ function start(bytes, canvas_id, save_data) {
                   distances[a] < distances[b] ? a : b
                 );
                 Module.buttonPress(nearestEdge);
+                e.preventDefault();
                 return;
             }
         });
@@ -158,6 +159,7 @@ function start(bytes, canvas_id, save_data) {
                   distances[a] < distances[b] ? a : b
                 );
                 Module.buttonPress(nearestEdge);
+                e.preventDefault();
                 return;
             }
             Module.buttonPress(key);
@@ -172,6 +174,9 @@ function start(bytes, canvas_id, save_data) {
             Module.buttonUnpress(key);
         });
         button.addEventListener('mousedown', () => {
+            if (key === 'super') {
+                return;
+            }
             Module.buttonPress(key);
         });
         button.addEventListener('mouseup', () => {
