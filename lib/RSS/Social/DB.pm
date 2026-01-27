@@ -236,6 +236,17 @@ sub migrations {
         create_index(qw/user_button_mappings uuid/),
         create_index(qw/user_button_mappings id_user/),
         create_index(qw/user_button_mappings controller/),
+        'CREATE TABLE user_rom_save_states (
+            id BIGSERIAL PRIMARY KEY,
+            uuid TEXT NOT NULL,
+            id_rom BIGINT NOT NULL,
+            save_state BYTEA NOT NULL,
+            created timestamp DEFAULT NOW(),
+            UNIQUE(uuid)
+        );',
+        create_index(qw/user_rom_save_states uuid/),
+        create_index(qw/user_rom_save_states id_rom/),
+        create_index(qw/user_rom_save_states created/),
     );
 }
 

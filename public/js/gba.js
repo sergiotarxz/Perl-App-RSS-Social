@@ -15,7 +15,8 @@ async function get_save() {
     return;
 }
 
-fetch('/private/rom/download/' + document.querySelector('#rom-name').value).then( (res) => {
+const rom_name = document.querySelector('#rom-name').value;
+fetch('/private/rom/download/' + rom_name).then( (res) => {
     get_save().then((save) => { 
         res.bytes().then( (bytes) => {
             let canvas_id = 'screen';
@@ -302,5 +303,34 @@ function start(bytes, canvas_id, save_data) {
             last_digest = hash;
         }
     }, 1000);
+    for (const save of [...document.querySelectorAll('div.save img')]) {
+        save.addEventListener('click', () => {
+            if (confirm("Do you want to load a save? You will lose your unsaved progress.")) {
+                (async () => {
+                    const res = await fetch(save.src);
+                    const bytes = await res.bytes();
+                    Module.FS.writeFile('/data/states/rom.ss1', bytes);
+                    Module.loadState(1);
+                })();
+            }
+        });
+    }
+    document.querySelector('button#save-state-game').addEventListener('click', () => {
+        Module.saveState(1);
+        window.setTimeout(() => {
+            const save = Module.FS.readFile('/data/states/rom.ss1');
+            const formData = new FormData();
+            formData.append('save_state', new Blob([save]));
+            fetch('/private/save_state/push/'
+                    + rom_name, {
+                method: 'post',
+                body: formData,
+            }).then((res) => {
+                // TODO: Proper notification system for users.
+                alert('saved');
+                console.log('Save state upload response: ' + res.status);
+            });
+        }, 1000);
+    });
 }
 

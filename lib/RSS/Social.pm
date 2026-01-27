@@ -75,7 +75,11 @@ sub startup {
         }
         $c->res->headers->header('Cross-Origin-Opener-Policy', 'same-origin');
         $c->res->headers->header('Cross-Origin-Embedder-Policy', 'require-corp');
-        $c->render( template => 'rom/play', rom_name => $c->param('name'));
+        $c->render(
+            template    => 'rom/play',
+            rom_name    => $c->param('name'),
+            save_states => $rom->save_states
+        );
     });
     $ar->get('/save/download/:name', sub {
         my $c = shift;
@@ -89,6 +93,42 @@ sub startup {
         }
         $c->res->headers->content_disposition('attachment; filename=' . $rom->name.'.sav');
         $c->render( data => $rom->save );
+    });
+    $ar->post('/save_state/push/:name', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my $save_state = $c->req->upload('save_state');
+        my ($rom) = @{RSS::Social::UserRom->search(id_user => $user->id, name => $c->param('name'))};
+        if (!defined $rom) {
+            return $c->render( text => 'not ok: no rom', code => 400 );
+        }
+        my $uuid                  = uuid4();
+        $save_state = RSS::Social::UserRomSaveState->insert(
+            RSS::Social::UserRomSaveState::Instance->new(
+                uuid       => $uuid,
+                id_rom     => $rom->id,
+                save_state => [
+                    { dbd_attrs => { pg_type => PG_BYTEA } },
+                    $save_state->slurp
+                ]
+            )
+        );
+        return $c->render( text => 'ok' );
+    });
+    $ar->get('/download/save_state/:rom_name/<:uuid>.ss', sub {
+        my $c = shift;
+        my $user = $c->user;
+        my ($rom) = @{RSS::Social::UserRom->search(id_user => $user->id, name => $c->param('rom_name'))};
+        if (!defined $rom) {
+            return $c->reply->not_found;
+        }
+        my ($save_state) = @{RSS::Social::UserRomSaveState->search(id_rom => $rom->id, uuid => $c->param('uuid'))};
+        if (!defined $save_state) {
+            return $c->reply->not_found;
+        }
+        $c->res->headers->content_type('image/png');
+#        $c->res->headers->content_disposition('attachment; filename=' . $rom->name.'.ss');
+        $c->render( data => $save_state->save_state );
     });
     $ar->post('/save/push/:name', sub {
         my $c = shift;

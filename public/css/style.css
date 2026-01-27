@@ -411,3 +411,7 @@ canvas#screen {
 div.controls button {
     height: 1rem;
 }
+
+div.save {
+    display: inline-block;
+}

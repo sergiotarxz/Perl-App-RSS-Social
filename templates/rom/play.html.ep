@@ -23,6 +23,8 @@
         <option value="1.5">150</option>
         <option value="2">200</option>
     </select>
+
+    <button id="save-state-game">Fast Save State</button>
     <div id="canvas-container">
         <canvas id="screen"></canvas>
         <button class="gba-button gba-button-a">A</button>
@@ -89,6 +91,17 @@
         </ul>
     </div>
 -->
+
+    <h2>Save States</h2>
+
+    <div class="save-grid">
+% my @save_states = @{(stash 'save_states') // []};
+% for my $save (@save_states) {
+        <div class="save">
+            <img src="/private/download/save_state/<%=$rom_name%>/<%=$save->uuid%>.ss"/>
+        </div>
+% }
+    </div>
 </div>
 <script>
     var Module;

@@ -13,6 +13,8 @@ sub dbh {
     return RSS::Social::DB->connect;
 }
 
+require RSS::Social::UserRomSaveState;
+
 table 'user_roms';
 
 field id => ( is => 'ro', pk => 1, search => 1 );
